@@ -22,7 +22,10 @@ class FormField extends Model
         return [
             'type' => FormFieldType::class,
             'default_option_id' => 'integer',
+            'dependency_field_id' => 'integer',
+            'dependency_option_id' => 'integer',
             'hide_option_price' => 'boolean',
+            'dependency_equals' => 'boolean',
             'width' => 'integer',
             'required' => 'boolean',
             'sort_order' => 'integer',
@@ -48,6 +51,16 @@ class FormField extends Model
     public function defaultOption(): BelongsTo
     {
         return $this->belongsTo(FormFieldOption::class, 'default_option_id');
+    }
+
+    public function dependencyField(): BelongsTo
+    {
+        return $this->belongsTo(FormField::class, 'dependency_field_id');
+    }
+
+    public function dependencyOption(): BelongsTo
+    {
+        return $this->belongsTo(FormFieldOption::class, 'dependency_option_id');
     }
 
     public function registrationValues(): HasMany

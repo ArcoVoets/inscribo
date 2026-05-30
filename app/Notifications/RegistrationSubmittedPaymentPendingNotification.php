@@ -8,7 +8,7 @@ use App\Models\Registration;
 use Carbon\CarbonInterface;
 use Override;
 
-class RegistrationSubmittedPaymentPending extends RegistrationNotification
+class RegistrationSubmittedPaymentPendingNotification extends RegistrationNotification
 {
     public function __construct(
         public readonly Registration $registration,

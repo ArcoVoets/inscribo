@@ -14,7 +14,7 @@ use App\Models\Invite;
 use App\Models\Registration;
 use App\Models\RegistrationStates\PaymentPendingState;
 use App\Models\RegistrationStates\WaitlistedState;
-use App\Notifications\RegistrationSubmittedPaymentPending;
+use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
 use App\Notifications\WaitlistedNotification;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +23,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
@@ -151,7 +152,11 @@ class RegistrationController extends Controller
      *             required: bool,
      *             defaultOptionValue: string|null,
      *             hideOptionPrice: bool,
+     *             dependencyFieldId: int|null,
+     *             dependencyOptionId: int|null,
+     *             dependencyEquals: bool,
      *             options: array<int, array{
+     *                 id: int,
      *                 label: string,
      *                 value: string,
      *                 priceCents: int
@@ -187,7 +192,11 @@ class RegistrationController extends Controller
                         ? $field->options->firstWhere('id', $field->default_option_id)?->value
                         : null,
                     'hideOptionPrice' => (bool) $field->hide_option_price,
+                    'dependencyFieldId' => $field->dependency_field_id,
+                    'dependencyOptionId' => $field->dependency_option_id,
+                    'dependencyEquals' => (bool) $field->dependency_equals,
                     'options' => $field->options->map(fn (FormFieldOption $option): array => [
+                        'id' => $option->id,
                         'label' => $option->label,
                         'value' => $option->value,
                         'priceCents' => $option->price_cents,
@@ -350,16 +359,17 @@ class RegistrationController extends Controller
         }
 
         $formFields = $form->sections->flatMap->fields->all();
+        $visibleFields = $this->filterVisibleDynamicFields($formFields, $validated['fields'] ?? []);
 
         /** @var array<string, mixed> $validatedDynamic */
         $validatedFields = Validator::make(
             $validated['fields'] ?? [], // When a form has no fields, there won't be a fields array
-            $this->buildDynamicFieldsValidationRules($formFields),
+            $this->buildDynamicFieldsValidationRules($visibleFields),
             [],
-            $this->buildDynamicFieldsAttributeNames($formFields)
+            $this->buildDynamicFieldsAttributeNames($visibleFields)
         )->validate();
 
-        $prepared = $this->prepareRegistrationSubmissionData($event, $validatedFields);
+        $prepared = $this->prepareRegistrationSubmissionData($event, $validatedFields, $visibleFields);
 
         /** @var Registration $registration */
         [$registration, $waitlisted] = DB::transaction(function () use ($event, $prepared, $expiresAt, $inviteId, $inviteToken): array {
@@ -424,7 +434,7 @@ class RegistrationController extends Controller
                         ->notify(new WaitlistedNotification($registration));
                 } else {
                     Notification::route('mail', $email)
-                        ->notify(new RegistrationSubmittedPaymentPending($registration, $expiresAt));
+                        ->notify(new RegistrationSubmittedPaymentPendingNotification($registration, $expiresAt));
                 }
             }
         } catch (Throwable $e) {
@@ -515,15 +525,12 @@ class RegistrationController extends Controller
      * @param  array<int|string, mixed>  $submittedFieldValues
      * @return array{priceCents: int, values: array<int, array<string, mixed>>}
      */
-    private function prepareRegistrationSubmissionData(Event $event, array $submittedFieldValues): array
+    private function prepareRegistrationSubmissionData(Event $event, array $submittedFieldValues, array $fields): array
     {
         $form = $event->form;
         abort_if($form === null, 422);
 
-        /** @var FormField[] $fields */
-        $fields = $form->sections
-            ->flatMap->fields
-            ->keyBy('id');
+        $fields = collect($fields)->keyBy('id');
 
         $priceCents = (int) $form->base_price_cents;
         $registrationValues = [];
@@ -557,5 +564,48 @@ class RegistrationController extends Controller
             'priceCents' => $priceCents,
             'values' => $registrationValues,
         ];
+    }
+
+    /**
+     * @param  array<int, FormField>  $fields
+     * @param  array<int|string, mixed>  $submittedFieldValues
+     * @return array<int, FormField>
+     */
+    private function filterVisibleDynamicFields(array $fields, array $submittedFieldValues): array
+    {
+        $fieldsById = collect($fields)->keyBy('id');
+
+        return $fieldsById
+            ->filter(fn (FormField $field): bool => $this->isVisibleDynamicField($field, $submittedFieldValues, $fieldsById))
+            ->values()->all();
+    }
+
+    /**
+     * @param  array<int|string, mixed>  $submittedFieldValues
+     * @param  Collection<int, FormField>  $fieldsById
+     */
+    private function isVisibleDynamicField(FormField $field, array $submittedFieldValues, Collection $fieldsById): bool
+    {
+        if ($field->dependency_field_id === null || $field->dependency_option_id === null) {
+            return true;
+        }
+
+        $dependencyField = $fieldsById->get($field->dependency_field_id);
+
+        if (! $dependencyField instanceof FormField || ! $dependencyField->type?->hasOptions()) {
+            return true;
+        }
+
+        $submittedValue = $submittedFieldValues[$dependencyField->id] ?? null;
+
+        $selectedOption = $dependencyField->options->firstWhere('value', $submittedValue);
+
+        if ($selectedOption === null) {
+            return ! $field->dependency_equals;
+        }
+
+        $matches = $selectedOption->id === $field->dependency_option_id;
+
+        return $field->dependency_equals === $matches;
     }
 }

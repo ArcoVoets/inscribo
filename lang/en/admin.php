@@ -25,6 +25,8 @@ return [
                 ],
                 'add_label' => 'Add section',
                 'delete_disabled_tooltip' => 'Cannot delete this section because registrations already use fields in it.',
+                'conditional_visibility' => 'Conditional visibility',
+                'options' => 'Options',
             ],
             'field' => [
                 'fields' => [
@@ -34,9 +36,14 @@ return [
                     'type' => 'Type',
                     'default_option' => 'Default option',
                     'hide_option_price' => 'Hide option price',
+                    'visibility_field' => 'Show when field',
+                    'visibility_option' => 'Option',
+                    'visibility_condition' => 'Condition',
                     'width' => 'Width',
                     'required' => 'Required',
                     'options' => 'Options',
+                    'equals' => 'Equals',
+                    'not_equals' => 'Not equals',
                 ],
                 'add_label' => 'Add field',
                 'add_option_label' => 'Add option',

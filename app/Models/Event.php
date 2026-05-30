@@ -278,6 +278,8 @@ class Event extends Model
 
     public function replicateMailTemplatesFrom(Event $sourceEvent): void
     {
+        EventMailTemplate::query()->where('event_id', $this->id)->delete();
+
         foreach ($sourceEvent->mailTemplates as $template) {
             $replica = $template->replicate(['event_id']);
             $replica->event_id = $this->id;

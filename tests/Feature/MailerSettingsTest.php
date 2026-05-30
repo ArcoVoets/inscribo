@@ -4,7 +4,7 @@ use App\Listeners\SetNotificationMailer;
 use App\Models\Event;
 use App\Models\MailerSettings;
 use App\Models\Registration;
-use App\Notifications\RegistrationSubmittedPaymentPending;
+use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
 use Illuminate\Notifications\Events\NotificationSending;
 use Illuminate\Support\Facades\Config;
 
@@ -27,7 +27,7 @@ test('mailer settings configure per-event mailer and sender', function () {
         'event_id' => $event->id,
     ]);
 
-    $notification = new RegistrationSubmittedPaymentPending($registration, now()->addHour());
+    $notification = new RegistrationSubmittedPaymentPendingNotification($registration, now()->addHour());
 
     $listener = new SetNotificationMailer;
     $listener->handle(new NotificationSending($registration, $notification, 'mail'));
@@ -56,7 +56,7 @@ test('mailer settings are optional for notifications', function () {
         'event_id' => $event->id,
     ]);
 
-    $notification = new RegistrationSubmittedPaymentPending($registration, now()->addHour());
+    $notification = new RegistrationSubmittedPaymentPendingNotification($registration, now()->addHour());
 
     $message = $notification->toMail($registration);
 

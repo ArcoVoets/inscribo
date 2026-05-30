@@ -48,7 +48,7 @@ class Form extends Model
     {
         $event->refresh();
         if ($event->form !== null) {
-            $event->form->delete();
+            self::query()->whereKey($event->form->id)->delete();
         }
 
         $replica = $this->replicate(['event_id', 'email_field_id', 'name_field_id']);
@@ -57,6 +57,9 @@ class Form extends Model
 
         $replicatedEmailFieldId = null;
         $replicatedNameFieldId = null;
+        $fieldIdMap = [];
+        $optionIdMap = [];
+        $fieldReplicas = [];
 
         foreach ($this->sections as $section) {
             $sectionReplica = $section->replicate(['form_id']);
@@ -64,26 +67,18 @@ class Form extends Model
             $replica->sections()->save($sectionReplica);
 
             foreach ($section->fields as $field) {
-                $fieldReplica = $field->replicate(['default_option_id', 'form_id', 'section_id']);
+                $fieldReplica = $field->replicate(['default_option_id', 'dependency_field_id', 'dependency_option_id', 'form_id', 'section_id']);
                 $fieldReplica->form_id = $replica->id;
                 $fieldReplica->section_id = $sectionReplica->id;
                 $sectionReplica->fields()->save($fieldReplica);
+                $fieldIdMap[$field->id] = $fieldReplica->id;
+                $fieldReplicas[$field->id] = $fieldReplica;
 
-                $defaultOptionId = null;
                 foreach ($field->options as $option) {
                     $optionReplica = $option->replicate(['field_id']);
                     $optionReplica->field_id = $fieldReplica->id;
                     $fieldReplica->options()->save($optionReplica);
-
-                    if ($option->id === $field->default_option_id) {
-                        $defaultOptionId = $optionReplica->id;
-                    }
-                }
-
-                if ($defaultOptionId !== null) {
-                    $fieldReplica->update([
-                        'default_option_id' => $defaultOptionId,
-                    ]);
+                    $optionIdMap[$option->id] = $optionReplica->id;
                 }
 
                 if ($this->email_field_id === $field->id) {
@@ -94,6 +89,24 @@ class Form extends Model
                 }
             }
 
+        }
+
+        foreach ($this->fields as $field) {
+            $updates = [];
+
+            if ($field->default_option_id !== null) {
+                $updates['default_option_id'] = $optionIdMap[$field->default_option_id];
+            }
+
+            if ($field->dependency_field_id !== null) {
+                $updates['dependency_field_id'] = $fieldIdMap[$field->dependency_field_id];
+                $updates['dependency_option_id'] = $optionIdMap[$field->dependency_option_id];
+                $updates['dependency_equals'] = $field->dependency_equals;
+            }
+
+            if ($updates !== []) {
+                $fieldReplicas[$field->id]->update($updates);
+            }
         }
 
         $replica->update([

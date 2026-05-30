@@ -103,7 +103,7 @@ export default function Status({
                                 </div>
                             </div>
 
-                            <div className="mt-6 flex flex-col gap-3">
+                            <div className="mt-6 flex justify-between gap-3">
                                 {status.state === 'payment_pending' && status.checkoutUrl && (
                                     <Button
                                         asChild
@@ -131,7 +131,7 @@ export default function Status({
                                     <Button
                                         asChild
                                         variant="outline"
-                                        className="border-(--accent-color-title-and-button) text-(--accent-color-title-and-button) hover:bg-(--accent-color-title-and-button) hover:text-white dark:hover:text-black"
+                                        className="align-end w-57.5 border-(--accent-color-title-and-button) text-(--accent-color-title-and-button) hover:bg-(--accent-color-title-and-button) hover:text-white dark:hover:text-black"
                                         style={{ height: '40px', borderRadius: '3px', transition: 'all 0.3s ease 0s', transitionProperty: 'all', transitionDuration: '0.3s', transitionTimingFunction: 'ease', transitionDelay: '0s' }}
                                     >
                                         <a href={event.homeUrl} rel="noopener noreferrer">

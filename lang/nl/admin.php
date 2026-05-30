@@ -25,6 +25,8 @@ return [
                 ],
                 'add_label' => 'Sectie toevoegen',
                 'delete_disabled_tooltip' => 'Deze sectie kan niet worden verwijderd omdat inschrijvingen al velden hierin gebruiken.',
+                'conditional_visibility' => 'Voorwaardelijke zichtbaarheid',
+                'options' => 'Opties',
             ],
             'field' => [
                 'fields' => [
@@ -34,9 +36,14 @@ return [
                     'type' => 'Type',
                     'default_option' => 'Standaardoptie',
                     'hide_option_price' => 'Verberg optieprijs',
+                    'visibility_field' => 'Toon wanneer veld',
+                    'visibility_option' => 'Optie',
+                    'visibility_condition' => 'Voorwaarde',
                     'width' => 'Breedte',
                     'required' => 'Verplicht',
                     'options' => 'Opties',
+                    'equals' => 'Is gelijk aan',
+                    'not_equals' => 'Is niet gelijk aan',
                 ],
                 'add_label' => 'Veld toevoegen',
                 'add_option_label' => 'Optie toevoegen',

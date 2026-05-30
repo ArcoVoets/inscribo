@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Event;
-use App\Notifications\RegistrationSubmittedPaymentPending;
+use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -21,7 +21,7 @@ test('a registration sends a confirmation email with signed status link', functi
         ->post(route('events.register.store', ['event' => $event->id]), $payload)
         ->assertRedirect();
 
-    Notification::assertSentOnDemand(RegistrationSubmittedPaymentPending::class, function (RegistrationSubmittedPaymentPending $notification, array $channels, $notifiable) {
+    Notification::assertSentOnDemand(RegistrationSubmittedPaymentPendingNotification::class, function (RegistrationSubmittedPaymentPendingNotification $notification, array $channels, $notifiable) {
         expect($channels)->toContain('mail');
         expect($notifiable->routeNotificationFor('mail'))->toBe('registrant@example.com');
 

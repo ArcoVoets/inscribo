@@ -16,9 +16,13 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rules\Unique;
 
 class FormForm
@@ -174,8 +178,14 @@ class FormForm
                         ->columns(1)
                         ->extraItemActions([
                             Action::make('set_options')
-                                ->icon(Heroicon::ListBullet)
-                                ->badge(function (array $arguments, Repeater $component, FormField $record): ?int {
+                                ->icon(Heroicon::Cog6Tooth)
+                                ->badge(function (array $arguments, Repeater $component, $record): ?int {
+                                    // Note: when adding a field, the $record param gets passed a FormSection.
+                                    // I think this is a Filament issue, but for now this fixes it.
+                                    if (! $record instanceof FormField) {
+                                        return null;
+                                    }
+
                                     $fields = $component->getCachedExistingRecords()->ensure(FormField::class);
                                     if ($record->getAttributeValue('options_count') === null) {
                                         $fields->loadCount('options');
@@ -188,73 +198,127 @@ class FormForm
 
                                     return $record->options_count;
                                 })
-                                ->visible(function (array $arguments, Repeater $component): bool {
-                                    $fields = $component->getCachedExistingRecords()->ensure(FormField::class);
-                                    $field = $fields->firstWhere('id', $component->getRawItemState($arguments['item'])['id'] ?? null);
-
-                                    return $field !== null && $field->type !== null & $field->type->hasOptions();
-                                })
+                                ->visible(fn ($record): bool => $record instanceof FormField) // Since using this action on unsaved records triggers a Filament bug
                                 ->record(fn (array $arguments, Repeater $component): ?FormField => self::getFieldFromArgsAndRepeater($arguments, $component))
-                                ->fillForm(fn ($record): array => $record === null ? [] : [
+                                ->fillForm(fn (FormSection|FormField|null $record): array => $record instanceof FormField ? [
+                                    'dependency_field_id' => $record->dependency_field_id,
+                                    'dependency_option_id' => $record->dependency_option_id,
+                                    'dependency_equals' => $record->dependency_equals,
                                     'default_option_id' => $record->default_option_id,
                                     'hide_option_price' => $record->hide_option_price,
                                     'options' => $record->options()->get()->toArray(),
-                                ])
+                                ] : [])
+                                ->action(function (array $data, FormField $record) {
+                                    $record->fill([
+                                        'dependency_field_id' => Arr::get($data, 'dependency_field_id'),
+                                        'dependency_option_id' => Arr::get($data, 'dependency_option_id'),
+                                        'dependency_equals' => Arr::get($data, 'dependency_equals'),
+                                    ]);
+
+                                    if (in_array($record->type, [FormFieldType::Radio, FormFieldType::Select], true)) {
+                                        $record->default_option_id = Arr::get($data, 'default_option_id');
+                                        $record->hide_option_price = Arr::get($data, 'hide_option_price');
+                                    }
+
+                                    $record->save();
+                                })
                                 ->disabled(fn (EditEvent|ViewEvent $livewire): bool => ! $livewire instanceof EditEvent)
                                 ->schema([
-                                    Select::make('default_option_id')
-                                        ->label(__('admin.forms.form.field.fields.default_option'))
-                                        ->options(fn (?FormField $record): array => $record
-                                            ? $record->options()->pluck('label', 'id')->toArray()
-                                            : [])
-                                        ->nullable()
-                                        ->searchable()
-                                        ->visible(fn (?FormField $record): bool => $record?->type === FormFieldType::Select),
-                                    Toggle::make('hide_option_price')
-                                        ->label(__('admin.forms.form.field.fields.hide_option_price'))
-                                        ->default(false)
-                                        ->visible(fn (?FormField $record): bool => $record?->type?->hasOptions() ?? false),
-                                    Repeater::make('options')
-                                        ->addActionLabel(__('admin.forms.form.field.add_option_label'))
-                                        ->label(__('admin.forms.form.field.fields.options'))
-                                        ->table([
-                                            TableColumn::make(__('admin.forms.form.option.fields.label'))->markAsRequired(),
-                                            TableColumn::make(__('admin.forms.form.option.fields.value'))->markAsRequired(),
-                                            TableColumn::make(__('admin.forms.form.option.fields.price')),
-                                        ])
-                                        ->orderColumn('sort_order')
-                                        ->compact()
-                                        ->relationship('options')
+                                    Fieldset::make(__('admin.forms.form.section.conditional_visibility'))
+                                        ->columns(5)
                                         ->schema([
-                                            TextInput::make('label')->required()->label(__('admin.forms.form.option.fields.label')),
-                                            TextInput::make('value')
-                                                ->required()
-                                                ->label(__('admin.forms.form.option.fields.value'))
-                                                ->unique('form_field_options',
-                                                    modifyRuleUsing: fn (Unique $rule, TextInput $component): Unique => $rule->where('field_id', $component->getContainer()->getParentComponent()->getRecord()->id)
-                                                )
-                                                ->regex('/^[a-zA-Z0-9-_]+$/')
-                                                ->validationMessages([
-                                                    'regex' => __('admin.forms.form.field.option_value_validation_message'),
-                                                ]),
-                                            TextInput::make('price_cents')
-                                                ->label(__('admin.forms.form.option.fields.price'))
-                                                ->prefix('€')
-                                                ->numeric()
-                                                ->default(0)
-                                                ->inputMode('decimal')
-                                                ->step('0.01')
-                                                ->dehydrateStateUsing(function ($state): ?int {
-                                                    if ($state === null || $state === '') {
-                                                        return 0;
+                                            Select::make('dependency_field_id')
+                                                ->label(__('admin.forms.form.field.fields.visibility_field'))
+                                                ->columnSpan(2)
+                                                ->live()
+                                                ->options(function (?FormField $record): array {
+                                                    $form = $record?->section?->form;
+                                                    if ($form === null) {
+                                                        return [];
                                                     }
 
-                                                    return (int) round(((float) $state) * 100);
+                                                    return $form->fields()
+                                                        ->whereIn('type', [FormFieldType::Radio, FormFieldType::Select])
+                                                        ->when($record->exists, fn (Builder $query): Builder => $query->whereNot('id', $record->id))
+                                                        ->pluck('label', 'id')
+                                                        ->toArray();
                                                 })
-                                                ->formatStateUsing(fn ($state): ?string => $state === null ? null : (int) $state / 100),
-                                        ])
+                                                ->nullable()
+                                                ->searchable(),
+                                            Select::make('dependency_equals')
+                                                ->label(__('admin.forms.form.field.fields.visibility_condition'))
+                                                ->requiredWith('dependency_field_id')
+                                                ->boolean(trueLabel: __('admin.forms.form.field.fields.equals'), falseLabel: __('admin.forms.form.field.fields.not_equals'))
+                                                ->default(true)
+                                                ->visible(fn (Get $get): bool => $get('dependency_field_id') !== null),
+                                            Select::make('dependency_option_id')
+                                                ->requiredWith('dependency_field_id')
+                                                ->label(__('admin.forms.form.field.fields.visibility_option'))
+                                                ->columnSpan(2)
+                                                ->options(fn (?FormField $field, Get $get): ?array => $field?->section->form
+                                                    ->fields()->where('id', $get('dependency_field_id'))->first()
+                                                    ?->options()->pluck('label', 'id')->toArray()
+                                                )
+                                                ->nullable()
+                                                ->visible(fn (Get $get): bool => $get('dependency_field_id') !== null),
+                                        ]),
+
+                                    Fieldset::make(__('admin.forms.form.section.options'))
+                                        ->visible(fn (FormField|FormSection|null $record): bool => $record instanceof FormField && $record->type?->hasOptions() ?? false)
                                         ->columns(1)
-                                        ->visible(fn (?FormField $record): bool => $record?->type?->hasOptions() ?? false),
+                                        ->schema([
+                                            Select::make('default_option_id')
+                                                ->label(__('admin.forms.form.field.fields.default_option'))
+                                                ->options(fn (?FormField $record): array => $record instanceof FormField
+                                                    ? $record->options()->pluck('label', 'id')->toArray()
+                                                    : [])
+                                                ->nullable()
+                                                ->searchable()
+                                                ->visible(fn (?FormField $record): bool => $record?->type === FormFieldType::Select),
+                                            Toggle::make('hide_option_price')
+                                                ->label(__('admin.forms.form.field.fields.hide_option_price'))
+                                                ->default(false),
+                                            Repeater::make('options')
+                                                ->addActionLabel(__('admin.forms.form.field.add_option_label'))
+                                                ->label(__('admin.forms.form.field.fields.options'))
+                                                ->table([
+                                                    TableColumn::make(__('admin.forms.form.option.fields.label'))->markAsRequired(),
+                                                    TableColumn::make(__('admin.forms.form.option.fields.value'))->markAsRequired(),
+                                                    TableColumn::make(__('admin.forms.form.option.fields.price')),
+                                                ])
+                                                ->orderColumn('sort_order')
+                                                ->compact()
+                                                ->relationship('options')
+                                                ->schema([
+                                                    TextInput::make('label')->required()->label(__('admin.forms.form.option.fields.label')),
+                                                    TextInput::make('value')
+                                                        ->required()
+                                                        ->label(__('admin.forms.form.option.fields.value'))
+                                                        ->unique('form_field_options',
+                                                            modifyRuleUsing: fn (Unique $rule, TextInput $component): Unique => $rule->where('field_id', $component->getContainer()->getParentComponent()->getRecord()->id)
+                                                        )
+                                                        ->regex('/^[a-zA-Z0-9-_]+$/')
+                                                        ->validationMessages([
+                                                            'regex' => __('admin.forms.form.field.option_value_validation_message'),
+                                                        ]),
+                                                    TextInput::make('price_cents')
+                                                        ->label(__('admin.forms.form.option.fields.price'))
+                                                        ->prefix('€')
+                                                        ->numeric()
+                                                        ->default(0)
+                                                        ->inputMode('decimal')
+                                                        ->step('0.01')
+                                                        ->dehydrateStateUsing(function ($state): ?int {
+                                                            if ($state === null || $state === '') {
+                                                                return 0;
+                                                            }
+
+                                                            return (int) round(((float) $state) * 100);
+                                                        })
+                                                        ->formatStateUsing(fn ($state): ?string => $state === null ? null : (int) $state / 100),
+                                                ])
+                                                ->columns(1),
+                                        ]),
                                 ]),
                         ]),
                 ])

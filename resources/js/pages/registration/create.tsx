@@ -1,5 +1,5 @@
 import { Form, Head, router } from '@inertiajs/react';
-import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -16,6 +16,7 @@ import { getSendHeight } from '@/lib/utils';
 import { store as registerForEvent } from '@/wayfinder/routes/events/register';
 import { Inertia } from '@/wayfinder/types';
 
+type RegistrationField = Inertia.Pages.Registration.Create['form']['sections'][number]['fields'][number];
 
 function moneyEUR(cents: number) {
     return `€ ${(cents / 100).toFixed(2)}`;
@@ -69,6 +70,42 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
 
     const [selectedFieldValues, setSelectedFieldValues] = useState<Record<number, string>>({});
 
+    const fieldsById = useMemo(() => {
+        const map = new Map<number, RegistrationField>();
+
+        if (form) {
+            for (const section of form.sections) {
+                for (const field of section.fields) {
+                    map.set(field.id, field);
+                }
+            }
+        }
+
+        return map;
+    }, [form]);
+
+    const isFieldVisible = useCallback((field: RegistrationField): boolean => {
+        if (!field.dependencyFieldId || !field.dependencyOptionId) {
+            return true;
+        }
+
+        const dependencyField = fieldsById.get(field.dependencyFieldId);
+
+        if (!dependencyField) {
+            return true;
+        }
+
+        const dependencyValue = selectedFieldValues[dependencyField.id];
+
+        const selectedOption = dependencyField.options.find((option) => option.value === dependencyValue);
+        if (!selectedOption) {
+            return !field.dependencyEquals;
+        }
+
+        const matches = selectedOption.id === field.dependencyOptionId;
+        return field.dependencyEquals === matches;
+    }, [fieldsById, selectedFieldValues]);
+
     const totalPriceCents = useMemo(() => {
         if (!form) {
             return 0;
@@ -78,6 +115,10 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
 
         for (const section of form.sections) {
             for (const field of section.fields) {
+                if (!isFieldVisible(field)) {
+                    continue;
+                }
+
                 if (field.type !== 'radio' && field.type !== 'select') {
                     continue;
                 }
@@ -97,7 +138,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
         }
 
         return total;
-    }, [form, selectedFieldValues]);
+    }, [form, isFieldVisible, selectedFieldValues]);
 
     const showCapacity = capacity !== null;
     const showCapacityFullWarning = showCapacity && capacity.isCapacityFull;
@@ -211,6 +252,10 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
                                         <CardContent className="px-0">
                                             <div className="flex flex-col gap-4 sm:-mx-2 sm:flex-row sm:flex-wrap sm:gap-x-0 sm:gap-y-6">
                                                 {section.fields.map((field) => {
+                                                    if (!isFieldVisible(field)) {
+                                                        return null;
+                                                    }
+
                                                     const fieldError = errors[`fields.${field.id}`] ?? errors[`${field.id}`];
                                                     const fieldName = `fields[${field.id}]`;
                                                     const normalizedWidth = Math.min(100, Math.max(1, field.width || 100));
@@ -326,7 +371,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
 
                                 <Button
                                     type="submit"
-                                    className="text-white dark:text-black bg-[var(--accent-color-title-and-button)] hover:bg-[var(--accent-color-button-hover)]"
+                                    className="text-white dark:text-black bg-(--accent-color-title-and-button) hover:bg-(--accent-color-button-hover)"
                                     style={{ width: '230px', height: '40px', borderRadius: '3px', transition: 'all 0.3s ease 0s', transitionProperty: 'all', transitionDuration: '0.3s', transitionTimingFunction: 'ease', transitionDelay: '0s' }}
                                     disabled={processing || !form || props.isPreview}
                                 >

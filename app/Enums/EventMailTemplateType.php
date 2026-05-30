@@ -7,7 +7,7 @@ use App\Notifications\BaseNotification;
 use App\Notifications\InvitedFromWaitlistNotification;
 use App\Notifications\InvitedToRegisterNotification;
 use App\Notifications\RegistrationCompletedNotification;
-use App\Notifications\RegistrationSubmittedPaymentPending;
+use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
 use App\Notifications\WaitlistedNotification;
 use Filament\Support\Contracts\HasLabel;
 
@@ -40,7 +40,7 @@ enum EventMailTemplateType: string implements HasLabel
     public function notificationClass(): string
     {
         return match ($this) {
-            self::RegistrationSubmittedPaymentPending => RegistrationSubmittedPaymentPending::class,
+            self::RegistrationSubmittedPaymentPending => RegistrationSubmittedPaymentPendingNotification::class,
             self::Waitlisted => WaitlistedNotification::class,
             self::InvitedFromWaitlist => InvitedFromWaitlistNotification::class,
             self::RegistrationCompleted => RegistrationCompletedNotification::class,
