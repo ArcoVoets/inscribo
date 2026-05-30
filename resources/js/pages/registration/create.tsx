@@ -68,7 +68,20 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
     const strings = useLocaleStrings().registration.create;
     const formThemeStyle = getFormThemeStyle(event);
 
-    const [selectedFieldValues, setSelectedFieldValues] = useState<Record<number, string>>({});
+    const [selectedFieldValues, setSelectedFieldValues] = useState<Record<number, string>>(() => {
+        const initial: Record<number, string> = {};
+        if (!form) return initial;
+
+        for (const section of form.sections) {
+            for (const field of section.fields) {
+                if ((field.type === 'select' || field.type === 'radio') && field.defaultOptionValue) {
+                    initial[field.id] = field.defaultOptionValue;
+                }
+            }
+        }
+
+        return initial;
+    });
 
     const fieldsById = useMemo(() => {
         const map = new Map<number, RegistrationField>();
@@ -283,7 +296,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
                                                                 <NativeSelect
                                                                     id={`field-${field.id}`}
                                                                     name={fieldName}
-                                                                    defaultValue={field.defaultOptionValue ?? undefined}
+                                                                    value={selectedFieldValues[field.id] ?? ''}
                                                                     onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
                                                                     required={field.required}
                                                                     className="h-10.75 rounded-none bg-[#f4f6f7]"
@@ -309,6 +322,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
                                                                     />
                                                                     <RadioGroup
                                                                         name={fieldName}
+                                                                        value={selectedFieldValues[field.id] ?? ''}
                                                                         onValueChange={(value: string) => handleFieldValueChange(field.id, value)}
                                                                     >
                                                                         {field.options.map((option) => (
