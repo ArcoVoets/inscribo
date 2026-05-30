@@ -100,7 +100,7 @@ class RegistrationController extends Controller
         return Inertia::render('registration/create', [
             'event' => $this->mapEventForFrontend($event),
             'form' => $this->mapFormForFrontend($event),
-            'capacity' => $event->capacitySnapshot(),
+            'capacity' => $event->show_capacity_data ? $event->capacitySnapshot() : null,
             'isPreview' => true,
             'isIframe' => $request->has('iframe'),
         ]);
