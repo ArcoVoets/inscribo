@@ -176,7 +176,7 @@ class RegistrationController extends Controller
         return [
             'id' => $form->id,
             'title' => $form->title,
-            'description' => $form->description,
+            'description' => str($form->description)->sanitizeHtml()->toString(),
             'basePriceCents' => $form->base_price_cents,
             'sections' => $form->sections->map(fn (FormSection $section): array => [
                 'id' => $section->id,

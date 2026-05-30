@@ -12,8 +12,8 @@ use App\Models\FormSection;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Fieldset;
@@ -51,8 +51,14 @@ class FormForm
                             return (int) round(((float) $state) * 100);
                         })
                         ->formatStateUsing(fn ($state): ?string => $state === null ? null : (int) $state / 100),
-                    Textarea::make('description')
+                    RichEditor::make('description')
                         ->label(__('admin.forms.form.fields.description'))
+                        ->toolbarButtons([
+                            ['bold', 'italic', 'underline', 'link'],
+                            ['h1', 'h2', 'paragraph'],
+                            ['bulletList', 'orderedList'],
+                            ['undo', 'redo'],
+                        ])
                         ->columnSpanFull(),
                     Select::make('email_field_id')
                         ->label(__('admin.forms.form.fields.email_field'))

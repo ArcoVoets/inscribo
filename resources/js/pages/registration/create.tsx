@@ -222,9 +222,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
                     )}
 
                     {form?.description && (
-                        <div className="mb-6 rounded-none border bg-muted/30 p-4 text-sm text-muted-foreground">
-                            {form.description}
-                        </div>
+                        <div className="mb-4 text-sm prose dark:prose-invert" dangerouslySetInnerHTML={{ __html: form.description }} />
                     )}
 
                     {!form && (
