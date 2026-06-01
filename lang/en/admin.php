@@ -202,6 +202,8 @@ return [
                     'no_fields' => 'This event form does not contain any fields yet.',
                     'no_pricing_options' => 'No pricing options are configured in this event form.',
                     'no_confirmation_email' => 'No registration confirmation email template is configured.',
+                    'no_mailer_settings' => 'No mailer settings are configured for this event. Emails may not be sent.',
+                    'no_api_key' => 'No Mollie API key is configured for this event. Payments may not work.',
                 ],
             ],
             'wordpress_embed' => [

@@ -150,6 +150,9 @@ class EventForm
                             ->rules(['url:https,http'])
                             ->helperText(__('admin.events.form.fields.home_url_helper')),
                         Select::make('api_key_id')
+                            ->nullable()
+                            ->searchable()
+                            ->preload()
                             ->label(__('admin.events.form.fields.api_key'))
                             ->relationship('apiKey', 'name'),
                     ]),

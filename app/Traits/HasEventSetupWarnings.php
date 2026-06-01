@@ -25,10 +25,16 @@ trait HasEventSetupWarnings
         $tabCounts = [
             'general' => 0,
             'form' => 0,
+            'emails' => 0,
         ];
 
         $warnings = [];
         $form = $event?->form; // Event might be null on the CreateEvent page
+
+        if (($event?->api_key_id) === null) {
+            $warnings[] = __('admin.events.form.warnings.items.no_api_key');
+            $tabCounts['general']++;
+        }
 
         if (($form?->email_field_id) === null) {
             $warnings[] = __('admin.events.form.warnings.items.no_email_field');
@@ -53,6 +59,11 @@ trait HasEventSetupWarnings
         if (! $hasPricingOptions) {
             $warnings[] = __('admin.events.form.warnings.items.no_pricing_options');
             $tabCounts['form']++;
+        }
+
+        if (($event?->mailer_settings_id) === null) {
+            $warnings[] = __('admin.events.form.warnings.items.no_mailer_settings');
+            $tabCounts['emails']++;
         }
 
         return $this->eventSetupWarnings = [

@@ -202,6 +202,8 @@ return [
                     'no_fields' => 'Dit evenementformulier bevat nog geen velden.',
                     'no_pricing_options' => 'Er zijn geen prijsopties ingesteld in dit evenementformulier.',
                     'no_confirmation_email' => 'Er is geen bevestigingsmail voor inschrijving ingesteld.',
+                    'no_mailer_settings' => 'Er zijn geen mailer instellingen ingesteld voor dit evenement. E-mails kunnen mogelijk niet worden verzonden.',
+                    'no_api_key' => 'Er is geen Mollie API key ingesteld voor dit evenement. Betalingen werken mogelijk niet.',
                 ],
             ],
             'wordpress_embed' => [
