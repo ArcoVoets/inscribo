@@ -10,8 +10,10 @@ use App\Filament\Resources\Registrations\Schemas\RegistrationForm;
 use App\Filament\Resources\Registrations\Tables\RegistrationsTable;
 use App\Models\Event;
 use App\Models\RegistrationState;
+use Carbon\CarbonInterface;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Pages\ManageRelatedRecords;
@@ -125,11 +127,18 @@ class ManageEventRegistrations extends ManageRelatedRecords
                         ->options(RegistrationStates::class)
                         ->default([RegistrationStates::Registered])
                         ->columnSpanFull(),
+                    DateTimePicker::make('from_date')
+                        // Even though the timezone this is also set in the AppServiceProvider, we also set it here, since that fixes the
+                        // default time being off because of timezones. Not sure why, but it fixes the issue.
+                        ->timezone(config('app.timezone'))
+                        ->default(fn (Event $record): CarbonInterface => $record->created_at->startOfDay())
+                        ->label(__('admin.events.pages.manage_registrations.export.from_date'))
+                        ->columnSpanFull(),
                 ])
                 ->action(function (array $data) {
                     /** @var Event $event */
                     $event = $this->getOwnerRecord()->load('registrations');
-                    $registrations = $event->registrations()->whereStateIn($data['states'])->get();
+                    $registrations = $event->registrations()->whereStateIn($data['states'])->where('created_at', '>=', $data['from_date'])->get();
 
                     $csv = app()->make(ExportRegistrations::class)->execute($event, $registrations, $data['separator'], $data['include_headers']);
                     $filename = __('admin.events.pages.manage_registrations.export.file_name', [

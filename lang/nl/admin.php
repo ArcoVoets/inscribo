@@ -290,6 +290,7 @@ return [
                     'separator_comma' => 'Komma (,)',
                     'separator_semicolon' => 'Puntkomma (;)',
                     'separator_tab' => 'Tab (\t)',
+                    'from_date' => 'Vanaf datum',
                 ],
             ],
             'manage_form' => [

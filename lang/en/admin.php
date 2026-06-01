@@ -290,6 +290,7 @@ return [
                     'separator_comma' => 'Comma (,)',
                     'separator_semicolon' => 'Semicolon (;)',
                     'separator_tab' => 'Tab (\t)',
+                    'from_date' => 'From date',
                 ],
             ],
             'manage_form' => [
