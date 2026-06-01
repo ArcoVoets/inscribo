@@ -6,18 +6,22 @@ use App\Enums\RegistrationStates;
 use App\Models\Registration;
 use App\Models\RegistrationPayment;
 use App\Notifications\RegistrationCompletedNotification;
+use App\Services\MollieService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Mollie\Api\Resources\Payment;
 use Mollie\Api\Types\PaymentStatus;
-use Mollie\Laravel\Facades\Mollie;
 
 class SyncMolliePaymentStatus
 {
+    public function __construct(
+        private readonly MollieService $mollieService,
+    ) {}
+
     public function execute(RegistrationPayment $registrationPayment): Payment
     {
         /** @var Payment $payment */
-        $payment = Mollie::api()->payments->get($registrationPayment->mollie_payment_id);
+        $payment = $this->mollieService->getPayment($registrationPayment->registration->event, $registrationPayment->mollie_payment_id);
 
         [$registration, $justPaid] = DB::transaction(function () use ($registrationPayment, $payment): array {
             $registrationPayment = RegistrationPayment::query()

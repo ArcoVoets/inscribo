@@ -171,6 +171,7 @@ return [
                 'mail_template_content' => 'Content',
                 'mailer_settings' => 'Mailer settings',
                 'mailer_settings_helper' => 'Select the SMTP credentials used for this event.',
+                'api_key' => 'Mollie API key',
             ],
             'merge_tags' => [
                 'name' => 'Registrant name',
@@ -418,5 +419,16 @@ return [
     'roles' => [
         'manager' => 'Manager',
         'admin' => 'Admin',
+    ],
+
+    'api_keys' => [
+        'fields' => [
+            'name' => 'Name',
+            'key' => 'Key',
+        ],
+        'table' => [
+            'num_events' => 'Number of events using this key',
+            'update_key' => 'Update key',
+        ],
     ],
 ];

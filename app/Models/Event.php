@@ -71,6 +71,11 @@ class Event extends Model
         return $this->belongsTo(MailerSettings::class);
     }
 
+    public function apiKey(): BelongsTo
+    {
+        return $this->belongsTo(ApiKey::class);
+    }
+
     public function form(): HasOne
     {
         return $this->hasOne(Form::class);

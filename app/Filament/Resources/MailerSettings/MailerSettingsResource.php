@@ -20,6 +20,8 @@ class MailerSettingsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
+    protected static ?int $navigationSort = 2;
+
     public static function getNavigationLabel(): string
     {
         return __('admin.mailer_settings.resource.navigation_label');

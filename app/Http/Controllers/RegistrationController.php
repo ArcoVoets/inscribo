@@ -16,6 +16,7 @@ use App\Models\RegistrationStates\PaymentPendingState;
 use App\Models\RegistrationStates\WaitlistedState;
 use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
 use App\Notifications\WaitlistedNotification;
+use App\Services\MollieService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -279,7 +280,7 @@ class RegistrationController extends Controller
         ]);
     }
 
-    public function checkout(Event $event, Registration $registration, Request $request): RedirectResponse|HttpResponse|JsonResponse
+    public function checkout(Event $event, Registration $registration, Request $request, MollieService $mollieService): RedirectResponse|HttpResponse|JsonResponse
     {
         if (! $request->hasValidSignatureWhileIgnoring(['iframe'])) {
             abort(401);
@@ -295,30 +296,16 @@ class RegistrationController extends Controller
             return redirect()->to($redirect);
         }
 
-        $latestPayment = $registration->currentPaymentState()->first();
+        $lastPayment = $registration->currentPaymentState()->first();
 
-        if ($latestPayment) {
-            try {
-                /** @var Payment $existingPayment */
-                $existingPayment = Mollie::api()->payments->get($latestPayment->mollie_payment_id);
+        $existingPayment = $mollieService->getPayment($registration->event, $lastPayment->mollie_payment_id);
 
-                $checkoutUrl = $existingPayment->getCheckoutUrl();
-                if ($existingPayment->isOpen() && $checkoutUrl) {
-                    return Inertia::location($checkoutUrl);
-                } else {
-                    info('Existing Mollie payment is not open', [
-                        'registration_id' => $registration->id,
-                        'payment_id' => $existingPayment->id,
-                        'payment_status' => $existingPayment->status,
-                    ]);
-                }
-            } catch (Throwable $e) {
-                report($e);
-            }
+        $checkoutUrl = $existingPayment->getCheckoutUrl();
+        if ($existingPayment->isOpen() && $checkoutUrl) {
+            return Inertia::location($checkoutUrl);
         }
 
-        /** @var Payment $payment */
-        $payment = Mollie::api()->payments->create([
+        $payment = $mollieService->createPayment($registration->event, [
             'description' => 'Event #'.$event->id.' Registration #'.$registration->id,
             'amount' => new Money('EUR', number_format($registration->price_cents / 100, 2, '.', '')),
             'redirectUrl' => $registration->publicStatusUrl(['from_checkout' => '1']),

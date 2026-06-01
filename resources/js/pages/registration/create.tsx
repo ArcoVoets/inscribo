@@ -325,7 +325,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
                                                                     >
                                                                         {field.options.map((option) => (
                                                                             <div key={option.value} className="flex items-center gap-1">
-                                                                                <RadioGroupItem value={option.value} id={`field-${field.id}-${option.value}`} className="border-[var(--accent-color-label-and-radio)] text-[var(--accent-color-label-and-radio)]" />
+                                                                                <RadioGroupItem value={option.value} id={`field-${field.id}-${option.value}`} className="border-(--accent-color-label-and-radio) text-(--accent-color-label-and-radio)" />
                                                                                 <Label htmlFor={`field-${field.id}-${option.value}`} className="font-normal mb-0" style={{ color: 'var(--accent-color-label-and-radio)' }}>
                                                                                     {option.label}
                                                                                     {!field.hideOptionPrice && option.priceCents > 0 && ` (${moneyEUR(option.priceCents)})`}

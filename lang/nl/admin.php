@@ -171,6 +171,7 @@ return [
                 'mail_template_content' => 'Inhoud',
                 'mailer_settings' => 'Mailer instellingen',
                 'mailer_settings_helper' => 'Selecteer de SMTP-gegevens die voor dit evenement gebruikt worden.',
+                'api_key' => 'Mollie API key',
             ],
             'merge_tags' => [
                 'name' => 'Naam van deelnemer',
@@ -418,5 +419,16 @@ return [
     'roles' => [
         'manager' => 'Manager',
         'admin' => 'Beheerder',
+    ],
+
+    'api_keys' => [
+        'fields' => [
+            'name' => 'Naam',
+            'key' => 'Sleutel',
+        ],
+        'table' => [
+            'num_events' => 'Aantal evenementen',
+            'update_key' => 'Sleutel bijwerken',
+        ],
     ],
 ];

@@ -20,6 +20,8 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
+    protected static ?int $navigationSort = 4;
+
     public static function getNavigationLabel(): string
     {
         return __('admin.users.resource.navigation_label');
