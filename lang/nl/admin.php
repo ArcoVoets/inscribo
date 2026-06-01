@@ -230,8 +230,13 @@ return [
             ],
         ],
         'tables' => [
+            'title' => 'Titel',
+            'capacity' => 'Capaciteit',
+            'opens_at' => 'Opent op',
+            'closes_at' => 'Sluit op',
             'student_price_cents' => 'Studenten prijs',
             'worker_price_cents' => 'Werkende prijs',
+            'show_waitlist_position' => 'Toon wachtlijstpositie',
             'invites' => [
                 'name' => 'Naam',
                 'email' => 'E-mailadres',

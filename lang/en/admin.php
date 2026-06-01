@@ -230,8 +230,13 @@ return [
             ],
         ],
         'tables' => [
+            'title' => 'Title',
+            'capacity' => 'Capacity',
+            'opens_at' => 'Opens at',
+            'closes_at' => 'Closes at',
             'student_price_cents' => 'Student price',
             'worker_price_cents' => 'Worker price',
+            'show_waitlist_position' => 'Show waitlist position',
             'invites' => [
                 'name' => 'Name',
                 'email' => 'Email address',

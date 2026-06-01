@@ -18,14 +18,18 @@ class EventsTable
         return $table
             ->columns([
                 TextColumn::make('title')
+                    ->label(__('admin.events.tables.title'))
                     ->searchable(),
                 TextColumn::make('capacity')
+                    ->label(__('admin.events.tables.capacity'))
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('opens_at')
+                    ->label(__('admin.events.tables.opens_at'))
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('closes_at')
+                    ->label(__('admin.events.tables.closes_at'))
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('student_price_cents')
@@ -39,6 +43,7 @@ class EventsTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 IconColumn::make('show_waitlist_position')
+                    ->label(__('admin.events.tables.show_waitlist_position'))
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
