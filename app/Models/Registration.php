@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Notifiable as NotifiableContract;
 use App\Enums\ParticipantType;
 use App\Enums\RegistrationStates;
 use Carbon\CarbonInterface;
@@ -12,12 +13,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Uri;
+use Override;
 
-class Registration extends Model
+class Registration extends Model implements NotifiableContract
 {
     use HasFactory;
+    use Notifiable;
 
     protected $guarded = [];
 
@@ -153,5 +158,26 @@ class Registration extends Model
             ?->value;
 
         return $name ?? __('registration.participant');
+    }
+
+    #[Override]
+    public function canBeSendToMail(): bool
+    {
+        return $this->notifyEmail() !== null;
+    }
+
+    public function routeNotificationForMail(?Notification $notification): array|string
+    {
+        $email = $this->notifyEmail();
+        if (! $email) {
+            return [];
+        }
+
+        $name = $this->name();
+        if (! $name) {
+            return $email;
+        }
+
+        return [$email => $name];
     }
 }

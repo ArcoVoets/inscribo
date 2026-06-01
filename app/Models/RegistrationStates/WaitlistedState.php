@@ -15,7 +15,6 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Parental\HasParent;
 
 class WaitlistedState extends RegistrationState
@@ -99,8 +98,7 @@ class WaitlistedState extends RegistrationState
                         return;
                     }
 
-                    FacadesNotification::route('mail', $notifyEmail)
-                        ->notify(new InvitedFromWaitlistNotification($record, $expiresAt));
+                    $record->notify(new InvitedFromWaitlistNotification($record, $expiresAt));
 
                     Notification::make()
                         ->title(__('admin.states.waitlisted.payment_window_opened'))

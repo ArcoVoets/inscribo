@@ -2,17 +2,22 @@
 
 namespace App\Models;
 
+use App\Contracts\Notifiable as NotifiableContract;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Uri;
+use Override;
 
-class Invite extends Model
+class Invite extends Model implements NotifiableContract
 {
     use HasFactory;
+    use Notifiable;
 
     protected $guarded = [];
 
@@ -123,5 +128,16 @@ class Invite extends Model
             'invite_token' => $this->token,
         ]);
 
+    }
+
+    #[Override]
+    public function canBeSendToMail(): bool
+    {
+        return true;
+    }
+
+    public function routeNotificationForMail(Notification $notification): array|string
+    {
+        return [$this->email => $this->name];
     }
 }

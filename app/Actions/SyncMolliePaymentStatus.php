@@ -8,7 +8,6 @@ use App\Models\RegistrationPayment;
 use App\Notifications\RegistrationCompletedNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 use Mollie\Api\Resources\Payment;
 use Mollie\Api\Types\PaymentStatus;
 use Mollie\Laravel\Facades\Mollie;
@@ -57,12 +56,7 @@ class SyncMolliePaymentStatus
 
         if ($justPaid && $registration !== null) {
             try {
-                $email = $registration->notifyEmail();
-
-                if ($email !== null) {
-                    Notification::route('mail', $email)
-                        ->notify(new RegistrationCompletedNotification($registration));
-                }
+                $registration->notify(new RegistrationCompletedNotification($registration));
             } catch (\Exception $e) {
                 report($e);
             }

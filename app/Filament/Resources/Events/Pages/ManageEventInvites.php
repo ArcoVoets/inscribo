@@ -19,7 +19,6 @@ use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class ManageEventInvites extends ManageRelatedRecords
 {
@@ -110,8 +109,7 @@ class ManageEventInvites extends ManageRelatedRecords
 
                     $success = true;
                     try {
-                        FacadesNotification::route('mail', $invite->email)
-                            ->notify(new InvitedToRegisterNotification($invite));
+                        $invite->notify(new InvitedToRegisterNotification($invite));
                     } catch (Exception $e) {
                         $success = false;
                         report($e);

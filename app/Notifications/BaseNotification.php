@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Contracts\Notifiable;
 use App\Enums\EventMailTemplateType;
 use App\Models\Event;
 use App\Models\EventMailTemplate;
@@ -16,9 +17,15 @@ abstract class BaseNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /** @return string[] */
-    public function via(object $notifiable): array
+    public function via(Notifiable $notifiable): array
     {
-        return ['mail'];
+        $channels = ['database'];
+
+        if ($notifiable->canBeSendToMail()) {
+            $channels[] = 'mail';
+        }
+
+        return $channels;
     }
 
     abstract public static function templateType(): EventMailTemplateType;
@@ -50,7 +57,7 @@ abstract class BaseNotification extends Notification implements ShouldQueue
             ->firstOrFail();
     }
 
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(Notifiable $notifiable): MailMessage
     {
         $mailTemplate = $this->getMailTemplate();
         $content = RichContentRenderer::make($mailTemplate->content)
@@ -74,7 +81,7 @@ abstract class BaseNotification extends Notification implements ShouldQueue
             );
     }
 
-    public function toArray(object $notifiable): array
+    public function toArray(Notifiable $notifiable): array
     {
         $mailTemplate = $this->getMailTemplate();
 

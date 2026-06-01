@@ -26,7 +26,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -426,16 +425,10 @@ class RegistrationController extends Controller
         });
 
         try {
-            $email = $registration->notifyEmail();
-
-            if ($email !== null) {
-                if ($waitlisted) {
-                    Notification::route('mail', $email)
-                        ->notify(new WaitlistedNotification($registration));
-                } else {
-                    Notification::route('mail', $email)
-                        ->notify(new RegistrationSubmittedPaymentPendingNotification($registration, $expiresAt));
-                }
+            if ($waitlisted) {
+                $registration->notify(new WaitlistedNotification($registration));
+            } else {
+                $registration->notify(new RegistrationSubmittedPaymentPendingNotification($registration, $expiresAt));
             }
         } catch (Throwable $e) {
             report($e);
