@@ -221,6 +221,7 @@ return [
                     'paste_status_shortcode' => 'Plak de statuspagina shortcode op de pagina.',
                     'publish_status_page' => 'Sla de pagina op en publiceer deze.',
                 ],
+                'plugin_page_action' => 'Bekijk plugin pagina',
             ],
         ],
         'mail_templates' => [

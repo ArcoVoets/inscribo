@@ -223,6 +223,15 @@ class EventForm
                         Callout::make(__('admin.events.form.wordpress_embed.instructions_heading'))
                             ->icon(Heroicon::InformationCircle)
                             ->description(fn (?Event $record): ?HtmlString => $record ? self::wordpressInstructionsDescription() : null)
+                            ->actions([
+                                Action::make('open_plugin_page')
+                                    ->link()
+                                    ->icon(Heroicon::ArrowTopRightOnSquare)
+                                    ->iconPosition(IconPosition::After)
+                                    ->label(__('admin.events.form.wordpress_embed.plugin_page_action'))
+                                    ->url('https://wordpress.org/plugins/inscribo-embed/')
+                                    ->openUrlInNewTab(),
+                            ])
                             ->columnSpanFull(),
                         TextInput::make('wordpress_form_shortcode')
                             ->label(__('admin.events.form.wordpress_embed.form_shortcode_label'))

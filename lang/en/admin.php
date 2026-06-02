@@ -221,6 +221,7 @@ return [
                     'paste_status_shortcode' => 'Paste the status page shortcode on the page.',
                     'publish_status_page' => 'Save and publish the page.',
                 ],
+                'plugin_page_action' => 'View plugin page',
             ],
         ],
         'mail_templates' => [
