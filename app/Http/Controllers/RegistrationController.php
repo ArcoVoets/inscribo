@@ -298,11 +298,13 @@ class RegistrationController extends Controller
 
         $lastPayment = $registration->currentPaymentState()->first();
 
-        $existingPayment = $mollieService->getPayment($registration->event, $lastPayment->mollie_payment_id);
+        if ($lastPayment !== null) {
+            $existingPayment = $mollieService->getPayment($registration->event, $lastPayment->mollie_payment_id);
 
-        $checkoutUrl = $existingPayment->getCheckoutUrl();
-        if ($existingPayment->isOpen() && $checkoutUrl) {
-            return Inertia::location($checkoutUrl);
+            $checkoutUrl = $existingPayment->getCheckoutUrl();
+            if ($existingPayment->isOpen() && $checkoutUrl) {
+                return Inertia::location($checkoutUrl);
+            }
         }
 
         $payment = $mollieService->createPayment($registration->event, [
