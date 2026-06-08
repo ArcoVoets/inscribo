@@ -88,13 +88,13 @@ class ManageEventInvites extends ManageRelatedRecords
                         ->options([
                             0 => __('admin.events.form.options.registration_expiration_never'),
                             1 => __('admin.events.form.options.registration_expiration_hours', ['hours' => 1]),
-                            6 => __('admin.events.form.options.registration_expiration_hours', ['hours' => 6]),
                             12 => __('admin.events.form.options.registration_expiration_hours', ['hours' => 12]),
                             24 => trans_choice('admin.events.form.options.registration_expiration_days', 1, ['days' => 1]),
                             2 * 24 => trans_choice('admin.events.form.options.registration_expiration_days', 2, ['days' => 2]),
                             7 * 24 => trans_choice('admin.events.form.options.registration_expiration_days', 7, ['days' => 7]),
+                            14 * 24 => trans_choice('admin.events.form.options.registration_expiration_days', 14, ['days' => 14]),
                         ])
-                        ->default(24)
+                        ->default(7 * 24)
                         ->required(),
                 ])
                 ->action(function (array $data): void {
