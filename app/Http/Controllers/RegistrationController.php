@@ -337,7 +337,7 @@ class RegistrationController extends Controller
         $inviteId = Arr::get($validated, 'invite_id');
         $inviteToken = Arr::get($validated, 'invite_token');
 
-        $expiresAt = now()->addMinutes($event->registration_expiration_minutes);
+        $expiresAt = now()->addMinutes((int) $event->registration_expiration_minutes);
 
         $form = $event->form;
         if (! $form) {
