@@ -132,6 +132,7 @@ return [
                 'wordpress' => 'WordPress instellingen',
                 'wordpress_embed' => 'WordPress embed',
                 'accent_colors' => 'Accent kleuren',
+                'payment' => 'Betaling',
             ],
             'fields' => [
                 'title' => 'Titel',
@@ -172,6 +173,9 @@ return [
                 'mailer_settings' => 'Mailer instellingen',
                 'mailer_settings_helper' => 'Selecteer de SMTP-gegevens die voor dit evenement gebruikt worden.',
                 'api_key' => 'Mollie API key',
+                'payment_description_template' => 'Mollie betalingsomschrijving template',
+                'payment_description_helper' => 'Stel de template in voor de betalingsomschrijving die naar Mollie wordt gestuurd. Let op: de uiteindelijke omschrijving mag niet langer zijn dan 255 tekens. Je kunt de volgende merge tags gebruiken:',
+                'payment_description_form_fields_merge_tags_helper' => 'Daarnaast kun je ook alle formuliervelden gebruiken:',
             ],
             'merge_tags' => [
                 'name' => 'Naam van deelnemer',

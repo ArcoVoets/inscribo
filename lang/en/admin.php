@@ -132,6 +132,7 @@ return [
                 'wordpress' => 'WordPress settings',
                 'wordpress_embed' => 'WordPress embed',
                 'accent_colors' => 'Accent colors',
+                'payment' => 'Payment',
             ],
             'fields' => [
                 'title' => 'Event title',
@@ -172,6 +173,9 @@ return [
                 'mailer_settings' => 'Mailer settings',
                 'mailer_settings_helper' => 'Select the SMTP credentials used for this event.',
                 'api_key' => 'Mollie API key',
+                'payment_description_template' => 'Mollie payment description template',
+                'payment_description_helper' => 'Set the template for the payment description sent to Mollie. Note: the final description must not exceed 255 characters. You can use the following merge tags:',
+                'payment_description_form_fields_merge_tags_helper' => 'Additionally, you can use all form fields:',
             ],
             'merge_tags' => [
                 'name' => 'Registrant name',

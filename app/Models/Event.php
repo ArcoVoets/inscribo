@@ -300,4 +300,31 @@ class Event extends Model
 
         return "event_{$this->id}";
     }
+
+    public static function paymentDescriptionMergeTags(): array
+    {
+        $mergeTags = [
+            'event_title',
+            'event_id',
+            'registration_id',
+        ];
+
+        $mergeTags = array_map(fn (string $tag): string => '{'.$tag.'}', $mergeTags);
+
+        return $mergeTags;
+    }
+
+    public function formFieldsMergeTags(): array
+    {
+        $mergeTags = [];
+
+        $formFields = $this->form?->fields()->pluck('name')->all() ?? [];
+        foreach ($formFields as $fieldName) {
+            $mergeTags[] = $fieldName;
+        }
+
+        $mergeTags = array_map(fn (string $tag): string => '{'.$tag.'}', $mergeTags);
+
+        return $mergeTags;
+    }
 }

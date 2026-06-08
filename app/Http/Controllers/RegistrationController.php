@@ -308,7 +308,7 @@ class RegistrationController extends Controller
         }
 
         $payment = $mollieService->createPayment($registration->event, [
-            'description' => 'Event #'.$event->id.' Registration #'.$registration->id,
+            'description' => $registration->paymentDescription(),
             'amount' => new Money('EUR', number_format($registration->price_cents / 100, 2, '.', '')),
             'redirectUrl' => $registration->publicStatusUrl(['from_checkout' => '1']),
             'webhookUrl' => route('webhooks.mollie'),

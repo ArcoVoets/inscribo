@@ -180,4 +180,35 @@ class Registration extends Model implements NotifiableContract
 
         return [$email => $name];
     }
+
+    public function paymentDescription(): string
+    {
+        $template = $this->event->payment_description_template;
+
+        if (! $template) {
+            return 'Event #'.$this->event->id.' Registration #'.$this->id;
+        }
+
+        $mergeTags = [
+            'event_title' => $this->event->title,
+            'event_id' => $this->event->id,
+            'registration_id' => $this->id,
+        ];
+
+        $formFields = $this->registrationValues()->pluck('value', 'field_id')->all();
+
+        foreach ($this->event->form?->fields ?? [] as $field) {
+            $mergeTags[$field->name] = $formFields[$field->id] ?? '';
+        }
+
+        $mergeTagsReplaced = str_replace(
+            array_map(fn (string $tag): string => '{'.$tag.'}', array_keys($mergeTags)),
+            array_values($mergeTags),
+            $template
+        );
+
+        $stripDoubleSpaces = preg_replace('/\s+/', ' ', $mergeTagsReplaced);
+
+        return trim($stripDoubleSpaces);
+    }
 }

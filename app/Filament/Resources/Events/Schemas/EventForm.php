@@ -20,6 +20,8 @@ use Filament\Schemas\Components\Callout;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Text;
+use Filament\Schemas\Components\UnorderedList;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconPosition;
@@ -149,12 +151,6 @@ class EventForm
                             ->url()
                             ->rules(['url:https,http'])
                             ->helperText(__('admin.events.form.fields.home_url_helper')),
-                        Select::make('api_key_id')
-                            ->nullable()
-                            ->searchable()
-                            ->preload()
-                            ->label(__('admin.events.form.fields.api_key'))
-                            ->relationship('apiKey', 'name'),
                     ]),
 
                 Section::make(__('admin.events.form.sections.accent_colors'))
@@ -172,6 +168,22 @@ class EventForm
                         ColorPicker::make('accent_color_section_title')
                             ->label(__('admin.events.form.fields.accent_color_section_title'))
                             ->helperText(__('admin.events.form.fields.accent_color_section_title_help_text')),
+                    ]),
+
+                Section::make(__('admin.events.form.sections.payment'))
+                    ->schema([
+                        Select::make('api_key_id')
+                            ->nullable()
+                            ->searchable()
+                            ->preload()
+                            ->label(__('admin.events.form.fields.api_key'))
+                            ->relationship('apiKey', 'name'),
+                        Text::make(__('admin.events.form.fields.payment_description_helper')),
+                        UnorderedList::make(Event::paymentDescriptionMergeTags()),
+                        Text::make(__('admin.events.form.fields.payment_description_form_fields_merge_tags_helper')),
+                        UnorderedList::make(fn (?Event $record): ?array => $record?->formFieldsMergeTags()),
+                        TextInput::make('payment_description_template')
+                            ->label(__('admin.events.form.fields.payment_description_template')),
                     ]),
             ]);
     }
