@@ -63,4 +63,16 @@ enum RegistrationStates: string implements HasColor, HasLabel
             self::Registered,
         ];
     }
+
+    public static function tabsOrder(): array
+    {
+        return [
+            self::Registered,
+            self::PaymentPending,
+            self::Waitlisted,
+            self::Cancelled,
+            self::PaymentExpired,
+            self::Refunded,
+        ];
+    }
 }

@@ -77,14 +77,14 @@ class ManageEventRegistrations extends ManageRelatedRecords
             ->get()
             ->mapWithKeys(fn ($item) => [$item->current_status => $item->total]);
 
-        foreach (RegistrationStates::cases() as $state) {
+        $tabs['all'] = Tab::make(__('admin.events.pages.manage_registrations.all'))
+            ->badge($event->registrations_count);
+
+        foreach (RegistrationStates::tabsOrder() as $state) {
             $tabs[$state->value] = Tab::make($state->getLabel())
                 ->modifyQueryUsing(fn (Builder $query): Builder => $query->whereState($state))
                 ->badge($registrationStateCounts->get($state->value, 0));
         }
-
-        $tabs['all'] = Tab::make(__('admin.events.pages.manage_registrations.all'))
-            ->badge($event->registrations_count);
 
         return $tabs;
     }
