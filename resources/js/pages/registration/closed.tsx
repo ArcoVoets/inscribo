@@ -3,12 +3,14 @@ import { Head } from '@inertiajs/react';
 import { useDateTimeFormatter } from '@/hooks/use-date-time-formatter';
 import { translate } from '@/i18n/translate';
 import { useLocaleStrings } from '@/i18n/use-locale-strings';
-import { getFormThemeStyle } from '@/lib/utils';
+import { getFormThemeStyle, useIframeHeightSync } from '@/lib/utils';
 import { Inertia } from '@/wayfinder/types';
 
 export default function Closed({ event, status, isIframe }: Inertia.Pages.Registration.Closed) {
     const strings = useLocaleStrings().registration.closed;
     const { formatDateTime } = useDateTimeFormatter();
+
+    useIframeHeightSync(isIframe, event.baseUrl);
 
     const formThemeStyle = getFormThemeStyle(event);
 
@@ -21,11 +23,11 @@ export default function Closed({ event, status, isIframe }: Inertia.Pages.Regist
         <>
             <Head title={strings.title} />
 
-            <div className="flex min-h-svh flex-col items-center justify-center bg-background p-6 md:p-14" style={formThemeStyle}>
+            <div className={"flex flex-col items-center justify-center bg-background p-6 md:p-14" + (isIframe ? '' : ' min-h-svh')} style={formThemeStyle}>
                 <div className="w-full max-w-xl text-center">
                     {isIframe || <h1 className="page-hero" style={{ color: 'var(--accent-color-title-and-button)' }}>{event.title}</h1>}
 
-                    <p className="text-lg text-muted-foreground">
+                    <p className="text-2xl font-semibold text-muted-foreground" style={{ color: 'var(--accent-color-title-and-button)' }}>
                         {statusMessage}
                     </p>
 

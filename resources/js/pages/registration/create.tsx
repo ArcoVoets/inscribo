@@ -11,8 +11,7 @@ import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { useLocaleStrings } from '@/i18n/use-locale-strings';
-import { getFormThemeStyle } from '@/lib/utils';
-import { getSendHeight } from '@/lib/utils';
+import { getFormThemeStyle, useIframeHeightSync } from '@/lib/utils';
 import { store as registerForEvent } from '@/wayfinder/routes/events/register';
 import { Inertia } from '@/wayfinder/types';
 
@@ -25,20 +24,7 @@ function moneyEUR(cents: number) {
 export default function Create(props: Inertia.Pages.Registration.Create) {
     const { event, form, capacity, invite, isIframe } = props;
 
-    useEffect(() => {
-        if (isIframe && event.baseUrl) {
-            const sendHeight = getSendHeight(event.baseUrl);
-            sendHeight();
-
-            window.addEventListener('resize', sendHeight);
-            document.addEventListener('inertia:finish', sendHeight);
-
-            return () => {
-                window.removeEventListener('resize', sendHeight);
-                document.removeEventListener('inertia:finish', sendHeight);
-            };
-        }
-    }, [event.baseUrl, isIframe]);
+    useIframeHeightSync(isIframe, event.baseUrl);
 
     // Note: this is a bit of a hack to handle redirects after form submission when the form is 
     // embedded in an iframe, since Inertia doesn't allow hooking into the Inertia::location redirect.

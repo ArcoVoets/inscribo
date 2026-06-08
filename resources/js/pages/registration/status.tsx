@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useDateTimeFormatter } from '@/hooks/use-date-time-formatter';
 import { translate } from '@/i18n/translate';
 import { useLocaleStrings } from '@/i18n/use-locale-strings';
-import { getFormThemeStyle } from '@/lib/utils';
-import { getSendHeight } from '@/lib/utils';
+import { getFormThemeStyle, useIframeHeightSync } from '@/lib/utils';
 import type { Inertia } from '@/wayfinder/types';
 
 
@@ -38,20 +37,7 @@ export default function Status({
         }
     };
 
-    useEffect(() => {
-        if (isIframe && event.baseUrl) {
-            const sendHeight = getSendHeight(event.baseUrl);
-            sendHeight();
-
-            window.addEventListener('resize', sendHeight);
-            document.addEventListener('inertia:finish', sendHeight);
-
-            return () => {
-                window.removeEventListener('resize', sendHeight);
-                document.removeEventListener('inertia:finish', sendHeight);
-            };
-        }
-    }, [event.baseUrl, isIframe]);
+    useIframeHeightSync(isIframe, event.baseUrl);
 
     // For explanation: see comment in create.tsx
     useEffect(() => {
@@ -76,7 +62,7 @@ export default function Status({
         <>
             <Head title={strings.title} />
 
-            <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-14" style={formThemeStyle}>
+            <div className={"flex flex-col items-center justify-center gap-6 bg-background p-6 md:p-14" + (isIframe ? '' : ' min-h-svh')} style={formThemeStyle}>
                 <div className="w-full max-w-xl">
                     {isIframe || <div className="mb-6">
                         <h1 className="page-hero" style={{ color: 'var(--accent-color-title-and-button)' }}>{event.title}</h1>
@@ -86,15 +72,15 @@ export default function Status({
                     {status.state && stateMessages && (
                         <>
                             <div className="mb-6">
-                                <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--accent-color-section-title)' }}>{stateMessages.title}</h2>
+                                <h2 className="text-3xl font-semibold mb-4" style={{ color: 'var(--accent-color-section-title)' }}>{stateMessages.title}</h2>
                                 <div className="space-y-3">
-                                    <p className="text-lg text-muted-foreground">
+                                    <p className="text-2xl text-muted-foreground" style={{ color: 'var(--accent-color-title-and-button)' }}>
                                         {translate(stateMessages.description, {
                                             datetime: status.expiresAt ? formatDateTime(status.expiresAt) : null,
                                         })}
                                     </p>
                                     {status.waitlistPosition != null && (
-                                        <p className="text-lg text-muted-foreground">
+                                        <p className="text-2xl text-muted-foreground" style={{ color: 'var(--accent-color-title-and-button)' }}>
                                             {translate(strings.waitlistPosition, {
                                                 position: status.waitlistPosition,
                                             })}
