@@ -21,4 +21,5 @@ enum PermissionsEnum: string
     case DELETE_FORMS = 'delete_forms';
     case MANAGE_MAILER_SETTINGS = 'manage_mailer_settings';
     case MANAGE_API_KEYS = 'manage_api_keys';
+    case DELETE_REGISTRATIONS = 'delete_registrations';
 }

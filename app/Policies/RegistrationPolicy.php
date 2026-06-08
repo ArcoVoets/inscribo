@@ -30,6 +30,6 @@ class RegistrationPolicy
 
     public function delete(User $user, Registration $registration): bool
     {
-        return $user->can(PermissionsEnum::MANAGE_REGISTRATIONS);
+        return $user->can(PermissionsEnum::DELETE_REGISTRATIONS);
     }
 }
