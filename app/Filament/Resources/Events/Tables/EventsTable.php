@@ -59,6 +59,9 @@ class EventsTable
                             ->required(),
                         DateTimePicker::make('closes_at')
                             ->label(__('admin.events.form.fields.closes_at')),
+                        TextInput::make('year')
+                            ->label(__('admin.events.form.fields.year'))
+                            ->helperText(__('admin.events.form.fields.year_helper')),
                     ])
                     ->after(function (Event $record, Event $replica): void {
                         $record->form->deepReplicate($replica);

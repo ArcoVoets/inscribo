@@ -41,6 +41,7 @@ class InvitedToRegisterNotification extends BaseNotification
             'expires_at_sentence' => __('admin.events.form.merge_tags.expires_at_sentence'),
             'event_title' => __('admin.events.form.merge_tags.event_title'),
             'register_button' => __('admin.events.form.merge_tags.register_button'),
+            'year' => __('admin.events.form.merge_tags.year'),
         ];
     }
 
@@ -70,6 +71,7 @@ class InvitedToRegisterNotification extends BaseNotification
                 'label' => __('mail.invited_to_register.register_button'),
             ])->render()),
             'expires_at_sentence' => $expiresAtSentence,
+            'year' => $this->getEvent()->year,
         ];
     }
 

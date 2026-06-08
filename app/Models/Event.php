@@ -307,6 +307,7 @@ class Event extends Model
             'event_title',
             'event_id',
             'registration_id',
+            'year',
         ];
 
         $mergeTags = array_map(fn (string $tag): string => '{'.$tag.'}', $mergeTags);

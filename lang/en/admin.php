@@ -151,7 +151,7 @@ return [
                 'home_url' => 'Home URL',
                 'home_url_helper' => 'The URL for the event\'s home page.',
                 'accent_color_title_and_button' => 'Title and submit button',
-                'accent_color_title_and_button_help_text' => 'Used for the page title and submit button.',
+                'accent_color_title_and_button_help_text' => 'Used for the page title, the buttons and the text on the closed and status pages.',
                 'accent_color_required_and_hover' => 'Required asterisks and button hover',
                 'accent_color_required_and_hover_help_text' => 'Used for required markers and the submit button hover color.',
                 'accent_color_label_and_radio' => 'Field labels and radio items',
@@ -176,6 +176,8 @@ return [
                 'payment_description_template' => 'Mollie payment description template',
                 'payment_description_helper' => 'Set the template for the payment description sent to Mollie. Note: the final description must not exceed 255 characters. You can use the following merge tags:',
                 'payment_description_form_fields_merge_tags_helper' => 'Additionally, you can use all form fields:',
+                'year' => 'Year',
+                'year_helper' => 'The year of the event. This can be used as a merge tag in emails and the Mollie payment description.',
             ],
             'merge_tags' => [
                 'name' => 'Registrant name',
@@ -187,6 +189,7 @@ return [
                 'pricing_details' => 'Pricing details',
                 'expires_at' => 'Expiration date',
                 'expires_at_sentence' => 'Expiration sentence',
+                'year' => 'Year',
             ],
             'options' => [
                 'registration_expiration_never' => 'Never',

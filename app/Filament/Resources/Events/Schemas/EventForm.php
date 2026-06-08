@@ -102,6 +102,10 @@ class EventForm
                             ->default(false)
                             ->inline(false)
                             ->helperText(__('admin.events.form.fields.show_capacity_data_helper')),
+                        TextInput::make('year')
+                            ->columnSpanFull()
+                            ->label(__('admin.events.form.fields.year'))
+                            ->helperText(__('admin.events.form.fields.year_helper')),
                     ]),
 
                 Section::make(__('admin.events.form.sections.registration'))

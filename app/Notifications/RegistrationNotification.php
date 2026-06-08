@@ -26,6 +26,7 @@ abstract class RegistrationNotification extends BaseNotification
             'event_title' => __('admin.events.form.merge_tags.event_title'),
             'status_url' => __('admin.events.form.merge_tags.status_url'),
             'status_button' => __('admin.events.form.merge_tags.status_button'),
+            'year' => __('admin.events.form.merge_tags.year'),
         ];
     }
 
@@ -41,6 +42,7 @@ abstract class RegistrationNotification extends BaseNotification
                 'url' => $statusUrl,
                 'label' => __('mail.status.action'),
             ])->render()),
+            'year' => $registration->event->year,
         ];
     }
 

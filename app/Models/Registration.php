@@ -193,6 +193,7 @@ class Registration extends Model implements NotifiableContract
             'event_title' => $this->event->title,
             'event_id' => $this->event->id,
             'registration_id' => $this->id,
+            'year' => $this->event->year,
         ];
 
         $formFields = $this->registrationValues()->pluck('value', 'field_id')->all();

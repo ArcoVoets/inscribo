@@ -151,7 +151,7 @@ return [
                 'home_url' => 'Home URL',
                 'home_url_helper' => 'De URL van de startpagina van het evenement.',
                 'accent_color_title_and_button' => 'Titel en verzendknop',
-                'accent_color_title_and_button_help_text' => 'Gebruikt voor de paginatitel en de achtergrond van de verzendknop.',
+                'accent_color_title_and_button_help_text' => 'Gebruikt voor de paginatitel, de achtergrond van de verzendknop en de tekst op de gesloten- en status paginas.',
                 'accent_color_required_and_hover' => 'Verplichte sterretjes en knop-hover',
                 'accent_color_required_and_hover_help_text' => 'Gebruikt voor verplichte markeringen en de hoverkleur van de verzendknop.',
                 'accent_color_label_and_radio' => 'Veldlabels en radio-items',
@@ -176,6 +176,8 @@ return [
                 'payment_description_template' => 'Mollie betalingsomschrijving template',
                 'payment_description_helper' => 'Stel de template in voor de betalingsomschrijving die naar Mollie wordt gestuurd. Let op: de uiteindelijke omschrijving mag niet langer zijn dan 255 tekens. Je kunt de volgende merge tags gebruiken:',
                 'payment_description_form_fields_merge_tags_helper' => 'Daarnaast kun je ook alle formuliervelden gebruiken:',
+                'year' => 'Jaar',
+                'year_helper' => 'Het jaar van het evenement. Dit kan gebruikt worden als merge tag in e-mails en de Mollie betalingsomschrijving.',
             ],
             'merge_tags' => [
                 'name' => 'Naam van deelnemer',
@@ -187,6 +189,7 @@ return [
                 'pricing_details' => 'Prijsdetails',
                 'expires_at' => 'Vervaldatum',
                 'expires_at_sentence' => 'Vervaldatum zin',
+                'year' => 'Jaar',
             ],
             'options' => [
                 'registration_expiration_never' => 'Nooit',
