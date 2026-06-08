@@ -30,6 +30,18 @@ export function getFormThemeStyle(event: Record<string, any>): CSSProperties {
 
 export function useIframeHeightSync(isIframe: boolean, baseUrl: string | null) {
     useEffect(() => {
+        const html = document.documentElement;
+        const body = document.body;
+
+        // Disable scroll bars when in an iframe
+        if (isIframe) {
+            html.classList.add('in-iframe');
+            body?.classList.add('in-iframe');
+        } else {
+            html.classList.remove('in-iframe');
+            body?.classList.remove('in-iframe');
+        }
+
         if (isIframe && baseUrl) {
 
             let lastHeight = 0;
@@ -64,9 +76,14 @@ export function useIframeHeightSync(isIframe: boolean, baseUrl: string | null) {
             document.addEventListener('inertia:finish', sendHeight);
 
             return () => {
+                // Resize listeners
                 ro.disconnect();
                 window.removeEventListener('resize', sendHeight);
                 document.removeEventListener('inertia:finish', sendHeight);
+
+                // Iframe scrollbar classes
+                html.classList.remove('in-iframe');
+                body?.classList.remove('in-iframe');
             };
         }
     }, [isIframe, baseUrl]);

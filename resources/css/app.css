@@ -136,6 +136,12 @@
 }
 
 @layer base {
+    /* When the app runs inside an iframe we add this class from JS
+       and apply overflow/overscroll utilities so parent scrolling is blocked. */
+    html.in-iframe,
+    body.in-iframe {
+        @apply overflow-hidden;
+    }
     * {
         @apply border-border;
         box-sizing: border-box;
