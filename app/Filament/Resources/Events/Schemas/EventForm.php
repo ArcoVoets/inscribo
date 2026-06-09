@@ -320,7 +320,7 @@ class EventForm
                             ->json()
                             ->toolbarButtons([
                                 ['bold', 'italic', 'underline', 'link'],
-                                ['h1', 'h2', 'paragraph'],
+                                ['h1', 'h2', 'paragraph', 'small'],
                                 ['bulletList', 'orderedList'],
                                 ['undo', 'redo'],
                             ])
