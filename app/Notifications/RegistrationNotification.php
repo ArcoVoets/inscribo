@@ -10,7 +10,7 @@ use Override;
 abstract class RegistrationNotification extends BaseNotification
 {
     public function __construct(
-        public readonly Registration $registration
+        public Registration $registration
     ) {}
 
     #[Override]

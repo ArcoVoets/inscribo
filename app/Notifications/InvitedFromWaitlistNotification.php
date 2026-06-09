@@ -11,8 +11,8 @@ use Override;
 class InvitedFromWaitlistNotification extends RegistrationNotification
 {
     public function __construct(
-        public readonly Registration $registration,
-        public readonly CarbonInterface $paymentExpiresAt,
+        public Registration $registration,
+        public CarbonInterface $paymentExpiresAt,
     ) {}
 
     #[Override]

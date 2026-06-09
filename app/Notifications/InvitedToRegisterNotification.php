@@ -11,7 +11,7 @@ use Override;
 class InvitedToRegisterNotification extends BaseNotification
 {
     public function __construct(
-        public readonly Invite $invite,
+        public Invite $invite,
     ) {}
 
     #[Override]
