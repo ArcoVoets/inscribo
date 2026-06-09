@@ -31,7 +31,7 @@ export default function Closed({ event, status, isIframe }: Inertia.Pages.Regist
                         {statusMessage}
                     </p>
 
-                    {event.homeUrl && (
+                    {event.homeUrl && !isIframe && (
                         <div className="mt-6">
                             <a
                                 href={event.homeUrl}
