@@ -317,15 +317,17 @@ class Event extends Model
 
     public function formFieldsMergeTags(): array
     {
-        $mergeTags = [];
+        return once(function () {
+            $mergeTags = [];
 
-        $formFields = $this->form?->fields()->pluck('name')->all() ?? [];
-        foreach ($formFields as $fieldName) {
-            $mergeTags[] = $fieldName;
-        }
+            $formFields = $this->form?->fields()->pluck('name')->all() ?? [];
+            foreach ($formFields as $fieldName) {
+                $mergeTags[] = $fieldName;
+            }
 
-        $mergeTags = array_map(fn (string $tag): string => '{'.$tag.'}', $mergeTags);
+            $mergeTags = array_map(fn (string $tag): string => '{'.$tag.'}', $mergeTags);
 
-        return $mergeTags;
+            return $mergeTags;
+        });
     }
 }

@@ -160,8 +160,8 @@ class FormForm
                             TextInput::make('name')
                                 ->required()
                                 ->label(__('admin.forms.form.field.fields.name'))
-                                ->unique('form_fields',
-                                    modifyRuleUsing: fn (Unique $rule, EditEvent|ViewEvent $livewire): Unique => $rule->where('form_id', $livewire->getRecord()->form->id))
+                                // ->unique(table: 'form_fields', column: 'name',
+                                //     modifyRuleUsing: fn (Unique $rule, EditEvent|ViewEvent $livewire): Unique => $rule->where('form_id', $livewire->getRecord()->form->id))
                                 ->regex('/^[a-zA-Z0-9-_]+$/')
                                 ->validationMessages([
                                     'regex' => __('admin.forms.form.field.option_value_validation_message'),
