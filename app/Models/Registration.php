@@ -125,11 +125,13 @@ class Registration extends Model implements NotifiableContract
         }
 
         $signedUri = Uri::of($signedUrl);
+
+        $statusUriQuery = array_merge($signedUri->query()->all(), [
+            'registration' => $this->id,
+        ]);
+
         $statusUri = Uri::of($statusPageUrl)
-            ->withQuery([
-                'registration' => $this->id,
-                'signature' => $signedUri->query()->get('signature'),
-            ]);
+            ->withQuery($statusUriQuery);
 
         return $statusUri->toString();
     }
