@@ -1,7 +1,9 @@
 <?php
 
 use App\Filament\Resources\Events\Pages\EditEvent;
+use App\Models\ApiKey;
 use App\Models\Event;
+use App\Models\MailerSettings;
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
 
@@ -27,11 +29,13 @@ it('calculates event setup warnings and tab counts', function () {
         __('admin.events.form.warnings.items.no_pricing_options'),
     );
 
-    expect($warnings['total'])->toBe(3)
-        ->and($warnings['tabCounts']['general'])->toBe(0)
+    expect($warnings['total'])->toBe(5)
+        ->and($warnings['tabCounts']['general'])->toBe(1)
         ->and($warnings['tabCounts']['form'])->toBe(3)
-        ->and($page->getEventSetupWarningCountForTab('general'))->toBeNull()
+        ->and($warnings['tabCounts']['emails'])->toBe(1)
+        ->and($page->getEventSetupWarningCountForTab('general'))->toBe(1)
         ->and($page->getEventSetupWarningCountForTab('form'))->toBe(3)
+        ->and($page->getEventSetupWarningCountForTab('emails'))->toBe(1)
         ->and($page->hasEventSetupWarnings())->toBeTrue();
 });
 
@@ -52,15 +56,19 @@ it('warns when the event form has sections but no fields', function () {
         __('admin.events.form.warnings.items.no_pricing_options'),
     );
 
-    expect($warnings['total'])->toBe(4)
-        ->and($warnings['tabCounts']['general'])->toBe(0)
+    expect($warnings['total'])->toBe(6)
+        ->and($warnings['tabCounts']['general'])->toBe(1)
         ->and($warnings['tabCounts']['form'])->toBe(4)
+        ->and($warnings['tabCounts']['emails'])->toBe(1)
         ->and($page->getEventSetupWarningCountForTab('form'))->toBe(4)
         ->and($page->hasEventSetupWarnings())->toBeTrue();
 });
 
 it('returns no event setup warnings when event is fully configured', function () {
     $event = Event::factory()->create()->fresh();
+    $apiKey = ApiKey::factory()->create();
+    $mailer = MailerSettings::factory()->create();
+    $event->update(['api_key_id' => $apiKey->id, 'mailer_settings_id' => $mailer->id]);
 
     $page = app(EditEvent::class);
     $page->record = $event->fresh();
