@@ -77,6 +77,7 @@ export default function Status({
                                     <p className="text-2xl text-muted-foreground" style={{ color: 'var(--accent-color-title-and-button)' }}>
                                         {translate(stateMessages.description, {
                                             datetime: status.expiresAt ? formatDateTime(status.expiresAt) : null,
+                                            eventName: event.title,
                                         })}
                                     </p>
                                     {status.waitlistPosition != null && (

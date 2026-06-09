@@ -51,7 +51,7 @@ export const en = {
                 },
                 registered: {
                     title: 'Registered',
-                    description: 'You are successfully registered for this event. A confirmation has been sent to your email.',
+                    description: 'You are successfully registered for :eventName. A confirmation has been sent to your email.',
                 },
                 cancelled: {
                     title: 'Registration cancelled',

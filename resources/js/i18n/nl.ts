@@ -51,7 +51,7 @@ export const nl = {
                 },
                 registered: {
                     title: 'Ingeschreven',
-                    description: 'Je bent succesvol ingeschreven voor dit evenement. Een bevestiging is naar je e-mailadres verzonden.',
+                    description: 'Je bent succesvol ingeschreven voor :eventName. Een bevestiging is naar je e-mailadres verzonden.',
                 },
                 cancelled: {
                     title: 'Inschrijving geannuleerd',
