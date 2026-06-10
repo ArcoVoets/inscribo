@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Event;
+use App\Models\FormField;
 use App\Models\Registration;
 use Illuminate\Support\Collection;
 
@@ -15,6 +16,8 @@ class ExportRegistrations
 
         // Get fields, ordered by section sort order and then field sort order
         $fields = $event->form->sections->flatMap->fields;
+        $fields = $fields->filter(fn (FormField $field) => $field->type->hasValue());
+
         if ($includeHeaders) {
             $export->push($fields->pluck('name')->toArray());
         }

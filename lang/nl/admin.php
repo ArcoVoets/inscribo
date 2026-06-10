@@ -27,6 +27,7 @@ return [
                 'delete_disabled_tooltip' => 'Deze sectie kan niet worden verwijderd omdat inschrijvingen al velden hierin gebruiken.',
                 'conditional_visibility' => 'Voorwaardelijke zichtbaarheid',
                 'options' => 'Opties',
+                'html' => 'HTML',
             ],
             'field' => [
                 'fields' => [
@@ -44,6 +45,7 @@ return [
                     'options' => 'Opties',
                     'equals' => 'Is gelijk aan',
                     'not_equals' => 'Is niet gelijk aan',
+                    'html' => 'HTML',
                 ],
                 'add_label' => 'Veld toevoegen',
                 'add_option_label' => 'Optie toevoegen',
@@ -65,6 +67,7 @@ return [
             'radio' => 'Keuzerondje',
             'select' => 'Keuzelijst',
             'date' => 'Datum',
+            'html' => 'HTML',
         ],
     ],
 

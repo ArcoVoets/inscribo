@@ -10,6 +10,7 @@ enum FormFieldType: string
     case Radio = 'radio';
     case Select = 'select';
     case Date = 'date';
+    case Html = 'html';
 
     public function getLabel(): string
     {
@@ -20,6 +21,7 @@ enum FormFieldType: string
             self::Radio => __('admin.forms.field_types.radio'),
             self::Select => __('admin.forms.field_types.select'),
             self::Date => __('admin.forms.field_types.date'),
+            self::Html => __('admin.forms.field_types.html'),
         };
     }
 
@@ -28,6 +30,14 @@ enum FormFieldType: string
         return match ($this) {
             self::Radio, self::Select => true,
             default => false,
+        };
+    }
+
+    public function hasValue(): bool
+    {
+        return match ($this) {
+            self::Html => false,
+            default => true,
         };
     }
 
@@ -40,7 +50,7 @@ enum FormFieldType: string
     {
         return match ($this) {
             self::Text, self::LongText, self::Email => true,
-            self::Radio, self::Select, self::Date => false,
+            self::Radio, self::Select, self::Date, self::Html => false,
         };
     }
 }

@@ -152,6 +152,7 @@ class RegistrationController extends Controller
      *             required: bool,
      *             defaultOptionValue: string|null,
      *             hideOptionPrice: bool,
+     *             htmlContent: string|null,
      *             dependencyFieldId: int|null,
      *             dependencyOptionId: int|null,
      *             dependencyEquals: bool,
@@ -186,6 +187,9 @@ class RegistrationController extends Controller
                     'label' => $field->label,
                     'placeholder' => $field->placeholder,
                     'type' => $field->type->value,
+                    'htmlContent' => $field->type === FormFieldType::Html
+                        ? str($field->html)->sanitizeHtml()->toString()
+                        : null,
                     'width' => $field->width,
                     'required' => $field->required,
                     'defaultOptionValue' => $field->type === FormFieldType::Select
@@ -559,6 +563,7 @@ class RegistrationController extends Controller
 
         return $fieldsById
             ->filter(fn (FormField $field): bool => $this->isVisibleDynamicField($field, $submittedFieldValues, $fieldsById))
+            ->filter(fn (FormField $field): bool => $field->type->hasValue())
             ->values()->all();
     }
 

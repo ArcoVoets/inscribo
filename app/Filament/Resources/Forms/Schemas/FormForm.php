@@ -213,6 +213,7 @@ class FormForm
                                     'default_option_id' => $record->default_option_id,
                                     'hide_option_price' => $record->hide_option_price,
                                     'options' => $record->options()->get()->toArray(),
+                                    'html' => $record->html,
                                 ] : [])
                                 ->action(function (array $data, FormField $record) {
                                     $record->fill([
@@ -224,6 +225,10 @@ class FormForm
                                     if (in_array($record->type, [FormFieldType::Radio, FormFieldType::Select], true)) {
                                         $record->default_option_id = Arr::get($data, 'default_option_id');
                                         $record->hide_option_price = Arr::get($data, 'hide_option_price');
+                                    }
+
+                                    if ($record->type === FormFieldType::Html) {
+                                        $record->html = Arr::get($data, 'html');
                                     }
 
                                     $record->save();
@@ -324,6 +329,20 @@ class FormForm
                                                         ->formatStateUsing(fn ($state): ?string => $state === null ? null : (int) $state / 100),
                                                 ])
                                                 ->columns(1),
+                                        ]),
+
+                                    Fieldset::make(__('admin.forms.form.section.html'))
+                                        ->visible(fn (FormField|FormSection|null $record): bool => $record instanceof FormField && $record->type === FormFieldType::Html)
+                                        ->schema([
+                                            RichEditor::make('html')
+                                                ->label(__('admin.forms.form.field.fields.html'))
+                                                ->toolbarButtons([
+                                                    ['bold', 'italic', 'underline', 'link'],
+                                                    ['h1', 'h2', 'paragraph'],
+                                                    ['bulletList', 'orderedList'],
+                                                    ['undo', 'redo'],
+                                                ])
+                                                ->columnSpanFull(),
                                         ]),
                                 ]),
                         ]),

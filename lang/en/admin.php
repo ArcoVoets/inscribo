@@ -27,6 +27,7 @@ return [
                 'delete_disabled_tooltip' => 'Cannot delete this section because registrations already use fields in it.',
                 'conditional_visibility' => 'Conditional visibility',
                 'options' => 'Options',
+                'html' => 'HTML',
             ],
             'field' => [
                 'fields' => [
@@ -44,6 +45,7 @@ return [
                     'options' => 'Options',
                     'equals' => 'Equals',
                     'not_equals' => 'Not equals',
+                    'html' => 'HTML',
                 ],
                 'add_label' => 'Add field',
                 'add_option_label' => 'Add option',
@@ -65,6 +67,7 @@ return [
             'radio' => 'Radio',
             'select' => 'Select',
             'date' => 'Date',
+            'html' => 'HTML',
         ],
     ],
 
