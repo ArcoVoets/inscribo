@@ -293,7 +293,8 @@ class EventForm
     {
         return $schema
             ->components([
-                Section::make(__('admin.events.form.sections.mailer_settings'))
+                Section::make(__('admin.events.form.sections.mailer_settings_and_confirmation_mail'))
+                    ->columns(2)
                     ->schema([
                         Select::make('mailer_settings_id')
                             ->label(__('admin.events.form.fields.mailer_settings'))
@@ -301,8 +302,12 @@ class EventForm
                             ->searchable()
                             ->preload()
                             ->nullable()
-                            ->helperText(__('admin.events.form.fields.mailer_settings_helper'))
-                            ->columnSpanFull(),
+                            ->helperText(__('admin.events.form.fields.mailer_settings_helper')),
+                        TextInput::make('confirmation_mail_address')
+                            ->label(__('admin.events.form.fields.confirmation_mail_address'))
+                            ->email()
+                            ->nullable()
+                            ->helperText(__('admin.events.form.fields.confirmation_mail_address_helper')),
                     ])
                     ->columnSpanFull(),
                 Repeater::make('mailTemplates')

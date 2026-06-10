@@ -26,6 +26,17 @@ class RegistrationCompletedNotification extends RegistrationNotification
         ]);
     }
 
+    protected function bccAddresses(): ?array
+    {
+        $confirmationMailAddress = $this->registration->event->confirmation_mail_address;
+
+        if ($confirmationMailAddress) {
+            return [$confirmationMailAddress];
+        }
+
+        return null;
+    }
+
     protected static function eventSpecificMergeTagLabels(): array
     {
         return [

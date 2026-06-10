@@ -50,6 +50,11 @@ abstract class BaseNotification extends Notification implements ShouldQueue
 
     abstract public function getEvent(): Event;
 
+    protected function bccAddresses(): ?array
+    {
+        return null;
+    }
+
     private function getMailTemplate(): EventMailTemplate
     {
         return $this->getEvent()->mailTemplates()
@@ -78,6 +83,10 @@ abstract class BaseNotification extends Notification implements ShouldQueue
             ->when(
                 $mailerSettings?->reply_to_address !== null,
                 fn (MailMessage $mail): MailMessage => $mail->replyTo($mailerSettings->reply_to_address)
+            )
+            ->when(
+                $this->bccAddresses() !== null,
+                fn (MailMessage $mail): MailMessage => $mail->bcc($this->bccAddresses())
             );
     }
 
