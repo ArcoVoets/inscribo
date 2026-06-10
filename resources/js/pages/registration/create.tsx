@@ -325,7 +325,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
 
                                                         case 'html':
                                                             control = (field.htmlContent && (
-                                                                    <div className="prose dark:prose-invert" dangerouslySetInnerHTML={{ __html: field.htmlContent }} />
+                                                                    <div className="prose max-w-none prose-p:text-(--accent-color-label-and-radio) dark:prose-invert" dangerouslySetInnerHTML={{ __html: field.htmlContent }} />
                                                             ));
                                                             break;
 
