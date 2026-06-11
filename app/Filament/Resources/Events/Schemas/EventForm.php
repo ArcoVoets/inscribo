@@ -328,7 +328,9 @@ class EventForm
                                 ['h1', 'h2', 'paragraph', 'small'],
                                 ['bulletList', 'orderedList'],
                                 ['undo', 'redo'],
+                                ['mergeTags'],
                             ])
+                            ->activePanel('mergeTags')
                             ->mergeTags(fn (RichEditor $component): array => $component->getRecord()->type->allMergeTagLabels())
                             ->columnSpanFull(),
                     ])
