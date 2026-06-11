@@ -365,6 +365,12 @@ return [
                             'description' => 'Are you sure you want to delete this registration? This action cannot be undone. If you want to cancel the registration, please use the cancel button.<br><br>By deleting this registration, the spot will become available again.<br><br>Participants will not be notified of this action.',
                         ],
                     ],
+                    'sync_payment_status' => [
+                        'label' => 'Sync payment status',
+                        'messages' => [
+                            'success' => 'Payment status synced successfully',
+                        ],
+                    ],
                 ],
             ],
         ],

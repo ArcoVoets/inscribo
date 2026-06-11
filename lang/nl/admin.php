@@ -365,6 +365,12 @@ return [
                             'description' => 'Weet je zeker dat je deze inschrijving wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt. Als je de inschrijving wilt annuleren, gebruik dan de annuleer knop.<br><br>Door deze aanmelding te verwijderen komt de plaats weer beschikbaar.<br><br>Deelnemers worden niet op de hoogte gesteld van deze actie.',
                         ],
                     ],
+                    'sync_payment_status' => [
+                        'label' => 'Sync betalingsstatus',
+                        'messages' => [
+                            'success' => 'Betalingsstatus succesvol gesynchroniseerd',
+                        ],
+                    ],
                 ],
             ],
         ],

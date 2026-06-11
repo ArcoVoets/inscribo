@@ -31,6 +31,7 @@ class SyncRolesAndPermissions
             PermissionsEnum::MANAGE_MAILER_SETTINGS,
             PermissionsEnum::MANAGE_API_KEYS,
             PermissionsEnum::DELETE_REGISTRATIONS,
+            PermissionsEnum::SYNC_PAYMENT_STATUS,
         ]);
 
         $rolesAndPermissions = [
