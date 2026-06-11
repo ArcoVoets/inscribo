@@ -78,10 +78,8 @@ class RegistrationController extends Controller
             ];
         }
 
-        $capacityProps = null;
-        if ($event->show_capacity_data) {
-            $capacityProps = $event->capacitySnapshot();
-        }
+        /** @var array|null $capacityProps */
+        $capacityProps = $event->show_capacity_data ? $event->capacitySnapshot() : null;
 
         return Inertia::render('registration/create', [
             'event' => $this->mapEventForFrontend($event),
@@ -97,10 +95,13 @@ class RegistrationController extends Controller
     {
         Gate::authorize('preview', $event);
 
+        /** @var array|null $capacityProps */
+        $capacityProps = $event->show_capacity_data ? $event->capacitySnapshot() : null;
+
         return Inertia::render('registration/create', [
             'event' => $this->mapEventForFrontend($event),
             'form' => $this->mapFormForFrontend($event),
-            'capacity' => $event->show_capacity_data ? $event->capacitySnapshot() : null,
+            'capacity' => $capacityProps,
             'isPreview' => true,
             'isIframe' => $request->has('iframe'),
         ]);
