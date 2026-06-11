@@ -32,16 +32,6 @@ class EventsTable
                     ->label(__('admin.events.tables.closes_at'))
                     ->dateTime()
                     ->sortable(),
-                TextColumn::make('student_price_cents')
-                    ->label(__('admin.events.tables.student_price_cents'))
-                    ->money('EUR', divideBy: 100, locale: 'nl')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-                TextColumn::make('worker_price_cents')
-                    ->label(__('admin.events.tables.worker_price_cents'))
-                    ->money('EUR', divideBy: 100, locale: 'nl')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
                 IconColumn::make('show_waitlist_position')
                     ->label(__('admin.events.tables.show_waitlist_position'))
                     ->boolean()

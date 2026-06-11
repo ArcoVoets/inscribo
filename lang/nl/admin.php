@@ -149,8 +149,6 @@ return [
                 'registration_link' => 'Inschrijvingslink',
                 'registration_expiration_minutes' => 'Betalingstermijn',
                 'registration_expiration_minutes_helper' => 'Let op: Dit geldt alleen voor nieuwe inschrijvingen.',
-                'student_price_cents' => 'Studenten prijs',
-                'worker_price_cents' => 'Werkende prijs',
                 'home_url' => 'Home URL',
                 'home_url_helper' => 'De URL van de startpagina van het evenement.',
                 'accent_color_title_and_button' => 'Titel en verzendknop',
@@ -250,8 +248,6 @@ return [
             'capacity' => 'Capaciteit',
             'opens_at' => 'Opent op',
             'closes_at' => 'Sluit op',
-            'student_price_cents' => 'Studenten prijs',
-            'worker_price_cents' => 'Werkende prijs',
             'show_waitlist_position' => 'Toon wachtlijstpositie',
             'invites' => [
                 'name' => 'Naam',
@@ -268,8 +264,6 @@ return [
                 'copy_link_notification' => 'Uitnodigingslink gekopieerd naar klembord',
             ],
             'registrations' => [
-                'email' => 'E-mailadres',
-                'participant_type' => 'Deelnemertype',
                 'state' => 'Status',
                 'registered_at' => 'Ingeschreven op',
             ],
@@ -333,9 +327,6 @@ return [
                 'payment_history' => 'Betalingsgeschiedenis',
             ],
             'fields' => [
-                'name' => 'Naam',
-                'participant_type' => 'Deelnemertype',
-                'email' => 'E-mailadres',
                 'amount' => 'Bedrag',
                 'submitted_at' => 'Ingediend op',
                 'state' => 'Status',
@@ -360,7 +351,6 @@ return [
         'tables' => [
             'name' => 'Name',
             'email' => 'E-mailadres',
-            'participant_type' => 'Deelnemertype',
             'state' => 'Status',
             'registered_at' => 'Ingeschreven op',
         ],

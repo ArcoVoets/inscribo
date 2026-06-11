@@ -3,11 +3,6 @@
 return [
     'participant' => 'Participant',
 
-    'participant_types' => [
-        'student' => 'Student',
-        'worker' => 'Worker',
-    ],
-
     'states' => [
         'waitlisted' => 'Waitlisted',
         'payment_pending' => 'Payment pending',

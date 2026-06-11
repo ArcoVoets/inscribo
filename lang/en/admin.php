@@ -149,8 +149,6 @@ return [
                 'registration_link' => 'Registration link',
                 'registration_expiration_minutes' => 'Payment timeout',
                 'registration_expiration_minutes_helper' => 'Note: This only applies to new registrations.',
-                'student_price_cents' => 'Student price',
-                'worker_price_cents' => 'Worker price',
                 'home_url' => 'Home URL',
                 'home_url_helper' => 'The URL for the event\'s home page.',
                 'accent_color_title_and_button' => 'Title and submit button',
@@ -250,8 +248,6 @@ return [
             'capacity' => 'Capacity',
             'opens_at' => 'Opens at',
             'closes_at' => 'Closes at',
-            'student_price_cents' => 'Student price',
-            'worker_price_cents' => 'Worker price',
             'show_waitlist_position' => 'Show waitlist position',
             'invites' => [
                 'name' => 'Name',
@@ -268,8 +264,6 @@ return [
                 'copy_link_notification' => 'Invite link copied to clipboard',
             ],
             'registrations' => [
-                'email' => 'Email address',
-                'participant_type' => 'Participant type',
                 'state' => 'State',
                 'registered_at' => 'Registered at',
             ],
@@ -333,9 +327,6 @@ return [
                 'payment_history' => 'Payment history',
             ],
             'fields' => [
-                'name' => 'Name',
-                'participant_type' => 'Participant type',
-                'email' => 'Email address',
                 'amount' => 'Amount',
                 'submitted_at' => 'Submitted at',
                 'state' => 'State',
@@ -360,7 +351,6 @@ return [
         'tables' => [
             'name' => 'Name',
             'email' => 'Email address',
-            'participant_type' => 'Participant type',
             'state' => 'State',
             'registered_at' => 'Registered at',
         ],

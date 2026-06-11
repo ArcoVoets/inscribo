@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Contracts\Notifiable as NotifiableContract;
-use App\Enums\ParticipantType;
 use App\Enums\RegistrationStates;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -29,7 +28,6 @@ class Registration extends Model implements NotifiableContract
     protected function casts(): array
     {
         return [
-            'participant_type' => ParticipantType::class,
             'price_cents' => 'integer',
         ];
     }

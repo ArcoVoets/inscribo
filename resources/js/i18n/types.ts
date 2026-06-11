@@ -16,14 +16,6 @@ export interface LocaleStrings {
             waitlistActiveTitle: string;
             waitlistActiveDescription: string;
             cannotRegisterTitle: string;
-            nameLabel: string;
-            namePlaceholder: string;
-            emailLabel: string;
-            emailPlaceholder: string;
-            cityLabel: string;
-            cityPlaceholder: string;
-            participantTypeLabel: string;
-            participantTypePlaceholder: string;
             formUnavailable: string;
             selectPlaceholder: string;
             totalPriceLabel: string;

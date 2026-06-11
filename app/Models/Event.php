@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\EventMailTemplateType;
-use App\Enums\ParticipantType;
 use App\Enums\RegistrationStates;
 use App\Observers\EventObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -127,18 +126,6 @@ class Event extends Model
         return $this->availableCapacity() > 0 && (! $waitlistExists);
     }
 
-    public function priceForParticipantType(ParticipantType|string $participantType): int
-    {
-        if (is_string($participantType)) {
-            $participantType = ParticipantType::from($participantType);
-        }
-
-        return match ($participantType) {
-            ParticipantType::Student => $this->student_price_cents,
-            ParticipantType::Worker => $this->worker_price_cents,
-        };
-    }
-
     public function registrationIsClosed(): bool
     {
         return $this->opens_at->isFuture() || $this->closes_at?->isNowOrPast();
@@ -147,19 +134,6 @@ class Event extends Model
     public function isOpenForRegistration(): bool
     {
         return ! $this->registrationIsClosed();
-    }
-
-    /** @return array{key:string, label:string, priceCents:int}[] */
-    public function participantTypes(): array
-    {
-        return array_map(
-            fn (ParticipantType $type): array => [
-                'key' => $type->value,
-                'label' => $type->getLabel(),
-                'priceCents' => $this->priceForParticipantType($type),
-            ],
-            ParticipantType::cases(),
-        );
     }
 
     public function cleanTitleForFilename(): string

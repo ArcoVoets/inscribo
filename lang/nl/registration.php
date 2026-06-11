@@ -3,11 +3,6 @@
 return [
     'participant' => 'Deelnemer',
 
-    'participant_types' => [
-        'student' => 'Student',
-        'worker' => 'Werkende',
-    ],
-
     'states' => [
         'waitlisted' => 'Op wachtlijst',
         'payment_pending' => 'Betaling in afwachting',
