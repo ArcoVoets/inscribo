@@ -37,7 +37,7 @@ class EditRegistration extends EditRecord
                         Notification::make()
                             ->title(__('admin.registrations.pages.edit.actions.sync_payment_status.messages.success'))
                             ->success()
-                            ->sendToCurrentUser();
+                            ->send();
                     })
                     ->visible(fn (Registration $record): bool => $record->payments()->exists() && Auth::user()->can(PermissionsEnum::SYNC_PAYMENT_STATUS)),
                 Action::make('status_page')
