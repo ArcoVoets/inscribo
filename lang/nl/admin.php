@@ -262,6 +262,11 @@ return [
                 'revoke' => 'Intrekken',
                 'close' => 'Sluiten',
                 'copy_link_notification' => 'Uitnodigingslink gekopieerd naar klembord',
+                'extend' => 'Verlengen',
+                'resend_invite_email' => 'Uitnodigingsmail opnieuw verzenden',
+                'extend_success_and_email_sent' => 'Uitnodiging verlengd en e-mail verzonden',
+                'extend_success' => 'Uitnodiging verlengd',
+                'extend_success_email_failed' => 'Uitnodiging verlengd maar e-mail is mogelijk niet verzonden',
             ],
             'registrations' => [
                 'state' => 'Status',
