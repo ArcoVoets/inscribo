@@ -100,7 +100,22 @@ class Event extends Model
     }
 
     /**
-     * @return array{reservedCount:int, availableCapacity:int, waitlistCount:int, waitlistIsEmpty:bool, isCapacityFull:bool}
+     * @return array{waitlistIsEmpty:bool,isCapacityFull:bool}
+     */
+    public function waitlistData(): array
+    {
+        $reservedCount = $this->reservedForCapacityCount();
+        $availableCapacity = max(0, (int) $this->capacity - $reservedCount);
+        $waitlistCount = $this->waitlistCount();
+
+        return [
+            'waitlistIsEmpty' => $waitlistCount === 0,
+            'isCapacityFull' => $availableCapacity === 0,
+        ];
+    }
+
+    /**
+     * @return array{reservedCount:int,availableCapacity:int,waitlistCount:int}
      */
     public function capacitySnapshot(): array
     {
@@ -112,8 +127,6 @@ class Event extends Model
             'reservedCount' => $reservedCount,
             'availableCapacity' => $availableCapacity,
             'waitlistCount' => $waitlistCount,
-            'waitlistIsEmpty' => $waitlistCount === 0,
-            'isCapacityFull' => $availableCapacity === 0,
         ];
     }
 

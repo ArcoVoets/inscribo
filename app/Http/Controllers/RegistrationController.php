@@ -85,6 +85,7 @@ class RegistrationController extends Controller
             'event' => $this->mapEventForFrontend($event),
             'form' => $this->mapFormForFrontend($event),
             'invite' => $inviteProps,
+            'waitlist' => $event->waitlistData(),
             'capacity' => $capacityProps,
             'isPreview' => false,
             'isIframe' => $request->has('iframe'),
@@ -101,6 +102,7 @@ class RegistrationController extends Controller
         return Inertia::render('registration/create', [
             'event' => $this->mapEventForFrontend($event),
             'form' => $this->mapFormForFrontend($event),
+            'waitlist' => $event->waitlistData(),
             'capacity' => $capacityProps,
             'isPreview' => true,
             'isIframe' => $request->has('iframe'),

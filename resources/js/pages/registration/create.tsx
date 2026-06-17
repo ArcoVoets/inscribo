@@ -22,7 +22,7 @@ function moneyEUR(cents: number) {
 }
 
 export default function Create(props: Inertia.Pages.Registration.Create) {
-    const { event, form, capacity, invite, isIframe } = props;
+    const { event, form, capacity, waitlist, invite, isIframe } = props;
 
     useIframeHeightSync(isIframe, event.baseUrl);
 
@@ -140,8 +140,8 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
     }, [form, isFieldVisible, selectedFieldValues]);
 
     const showCapacity = capacity !== null;
-    const showCapacityFullWarning = showCapacity && capacity.isCapacityFull;
-    const showWaitlistWarning = showCapacity && !capacity.waitlistIsEmpty;
+    const showCapacityFullWarning = waitlist.isCapacityFull;
+    const showWaitlistWarning = !waitlist.waitlistIsEmpty;
 
     const handleFieldValueChange = (fieldId: number, value: string) => {
         setSelectedFieldValues((current) => ({
