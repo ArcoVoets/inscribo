@@ -9,6 +9,7 @@ use App\Filament\Resources\Events\RegistrationsResource;
 use App\Filament\Resources\Registrations\Schemas\RegistrationForm;
 use App\Filament\Resources\Registrations\Tables\RegistrationsTable;
 use App\Models\Event;
+use App\Models\Registration;
 use App\Models\RegistrationState;
 use Carbon\CarbonInterface;
 use Filament\Actions\Action;
@@ -22,7 +23,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 use Override;
 
 class ManageEventRegistrations extends ManageRelatedRecords
@@ -56,7 +56,8 @@ class ManageEventRegistrations extends ManageRelatedRecords
         $event = $this->getOwnerRecord()
             ->loadCount('registrations');
 
-        $registrationStateCounts = DB::table('registrations')
+        $registrationStateCounts = Registration::query()
+            ->toBase() // Get the base query so that Eloquent doesn't try to fit the results in Registration models, but still get the global scopes applied.
             ->selectRaw('count(*) as total')
             ->where('event_id', $event->id)
             ->selectSub(
