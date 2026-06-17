@@ -32,4 +32,9 @@ class RegistrationPolicy
     {
         return $user->can(PermissionsEnum::DELETE_REGISTRATIONS);
     }
+
+    public function deleteAny(User $user): bool
+    {
+        return $user->can(PermissionsEnum::DELETE_REGISTRATIONS);
+    }
 }

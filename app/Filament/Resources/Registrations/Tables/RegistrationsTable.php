@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Registrations\Tables;
 
 use App\Filament\Resources\Events\Pages\ManageEventRegistrations;
 use App\Models\Registration;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Columns\TextColumn;
@@ -38,6 +39,9 @@ class RegistrationsTable
             ->defaultSort('created_at', 'desc')
             ->recordActions([
                 EditAction::make(),
+            ])
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ])
             // Include email and name fields if any. Without this, Laravel will automatically eager load the whole
             // relationship, meaning all registrationValues will be loaded instead of just the email and name fields.
