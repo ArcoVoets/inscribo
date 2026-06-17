@@ -67,9 +67,7 @@ class Registration extends Model implements NotifiableContract
     #[Scope]
     public function reservedForCapacity(Builder $query): Builder
     {
-        return $query->whereHas('currentState', function (Builder $stateQuery): void {
-            $stateQuery->whereIn('type', RegistrationStates::reservedStates());
-        });
+        return $query->whereStateIn(RegistrationStates::reservedStates());
     }
 
     #[Scope]
