@@ -264,6 +264,7 @@ return [
                 'extend' => 'Extend',
                 'copy_link_notification' => 'Invite link copied to clipboard',
                 'resend_invite_email' => 'Resend invite email',
+                'resend_invite_email_hint' => 'Resend the invite email with the new expiration date.',
                 'extend_success_and_email_sent' => 'Invite extended and email sent',
                 'extend_success' => 'Invite extended',
                 'extend_success_email_failed' => 'Invite extended but email may not have been sent',

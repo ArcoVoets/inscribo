@@ -96,6 +96,7 @@ class InvitesTable
                             ->default(fn (Invite $record): ?string => $record->expires_at?->format('Y-m-d H:i:s')),
                         Toggle::make('resend_invite_email')
                             ->label(__('admin.events.tables.invites.resend_invite_email'))
+                            ->hint(__('admin.events.tables.invites.resend_invite_email_hint'))
                             ->default(false),
                     ])
                     ->action(function (Invite $record, array $data): void {

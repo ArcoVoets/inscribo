@@ -264,6 +264,7 @@ return [
                 'copy_link_notification' => 'Uitnodigingslink gekopieerd naar klembord',
                 'extend' => 'Verlengen',
                 'resend_invite_email' => 'Uitnodigingsmail opnieuw verzenden',
+                'resend_invite_email_hint' => 'Verstuur de uitnodigingsmail opnieuw met de nieuwe vervaldatum.',
                 'extend_success_and_email_sent' => 'Uitnodiging verlengd en e-mail verzonden',
                 'extend_success' => 'Uitnodiging verlengd',
                 'extend_success_email_failed' => 'Uitnodiging verlengd maar e-mail is mogelijk niet verzonden',
