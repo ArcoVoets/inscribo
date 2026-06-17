@@ -43,6 +43,12 @@ class RegistrationsTable
             ->toolbarActions([
                 DeleteBulkAction::make(),
             ])
+            ->searchable()
+            ->searchUsing(fn (Builder $query, string $search): Builder => $query
+                ->when($search !== '', fn (Builder $query): Builder => $query
+                    ->whereRelation('registrationValues', 'value', 'like', "%{$search}%")
+                )
+            )
             // Include email and name fields if any. Without this, Laravel will automatically eager load the whole
             // relationship, meaning all registrationValues will be loaded instead of just the email and name fields.
             ->modifyQueryUsing(fn (Builder $query, ManageEventRegistrations $livewire) => $query
