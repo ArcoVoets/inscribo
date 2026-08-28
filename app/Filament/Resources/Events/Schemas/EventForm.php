@@ -14,6 +14,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Callout;
@@ -303,11 +304,13 @@ class EventForm
                             ->preload()
                             ->nullable()
                             ->helperText(__('admin.events.form.fields.mailer_settings_helper')),
-                        TextInput::make('confirmation_mail_address')
-                            ->label(__('admin.events.form.fields.confirmation_mail_address'))
-                            ->email()
+                        TagsInput::make('confirmation_mail_addresses')
+                            ->label(__('admin.events.form.fields.confirmation_mail_addresses'))
+                            ->placeholder(__('admin.events.form.fields.confirmation_mail_addresses_placeholder'))
+                            ->nestedRecursiveRules(['email'])
+                            ->trim()
                             ->nullable()
-                            ->helperText(__('admin.events.form.fields.confirmation_mail_address_helper')),
+                            ->helperText(__('admin.events.form.fields.confirmation_mail_addresses_helper')),
                     ])
                     ->columnSpanFull(),
                 Repeater::make('mailTemplates')

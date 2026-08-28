@@ -1,6 +1,10 @@
 <?php
 
+use App\Enums\EventMailTemplateType;
 use App\Models\Event;
+use App\Models\EventMailTemplate;
+use App\Models\Registration;
+use App\Notifications\RegistrationCompletedNotification;
 use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
@@ -32,4 +36,26 @@ test('a registration sends a confirmation email with signed status link', functi
 
         return true;
     });
+});
+
+test('a completed registration notification sends all configured confirmation addresses as bcc', function () {
+    $event = eventWithRegistrationForm([
+        'confirmation_mail_addresses' => [
+            'first@example.com',
+            'second@example.com',
+        ],
+    ]);
+    EventMailTemplate::factory()->create([
+        'event_id' => $event->id,
+        'type' => EventMailTemplateType::RegistrationCompleted,
+    ]);
+    /** @var Registration $registration */
+    $registration = Registration::factory()->for($event)->create();
+
+    $mail = (new RegistrationCompletedNotification($registration))->toMail($registration);
+
+    expect($mail->bcc)->toBe([
+        ['first@example.com', null],
+        ['second@example.com', null],
+    ]);
 });

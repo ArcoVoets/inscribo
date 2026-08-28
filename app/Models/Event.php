@@ -41,6 +41,7 @@ class Event extends Model
             'show_waitlist_position' => 'boolean',
             'show_capacity_data' => 'boolean',
             'wordpress_enabled' => 'boolean',
+            'confirmation_mail_addresses' => 'array',
         ];
     }
 

@@ -28,10 +28,10 @@ class RegistrationCompletedNotification extends RegistrationNotification
 
     protected function bccAddresses(): ?array
     {
-        $confirmationMailAddress = $this->registration->event->confirmation_mail_address;
+        $confirmationMailAddresses = $this->registration->event->confirmation_mail_addresses;
 
-        if ($confirmationMailAddress) {
-            return [$confirmationMailAddress];
+        if (is_array($confirmationMailAddresses) && $confirmationMailAddresses !== []) {
+            return $confirmationMailAddresses;
         }
 
         return null;
