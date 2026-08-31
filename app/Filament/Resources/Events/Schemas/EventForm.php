@@ -15,6 +15,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Callout;
@@ -107,6 +108,27 @@ class EventForm
                             ->columnSpanFull()
                             ->label(__('admin.events.form.fields.year'))
                             ->helperText(__('admin.events.form.fields.year_helper')),
+                    ]),
+
+                Section::make(__('admin.events.form.sections.capacity_and_waitlist'))
+                    ->columns(1)
+                    ->schema([
+                        TextInput::make('capacity_full_title')
+                            ->label(__('admin.events.form.fields.capacity_full_title'))
+                            ->helperText(__('admin.events.form.fields.capacity_full_title_helper'))
+                            ->maxLength(255),
+                        Textarea::make('capacity_full_description')
+                            ->label(__('admin.events.form.fields.capacity_full_description'))
+                            ->helperText(__('admin.events.form.fields.capacity_full_description_helper'))
+                            ->autosize(),
+                        TextInput::make('waitlist_active_title')
+                            ->label(__('admin.events.form.fields.waitlist_active_title'))
+                            ->helperText(__('admin.events.form.fields.waitlist_active_title_helper'))
+                            ->maxLength(255),
+                        Textarea::make('waitlist_active_description')
+                            ->label(__('admin.events.form.fields.waitlist_active_description'))
+                            ->helperText(__('admin.events.form.fields.waitlist_active_description_helper'))
+                            ->autosize(),
                     ]),
 
                 Section::make(__('admin.events.form.sections.registration'))

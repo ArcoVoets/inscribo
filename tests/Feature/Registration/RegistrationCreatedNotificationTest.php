@@ -1,8 +1,6 @@
 <?php
 
-use App\Enums\EventMailTemplateType;
 use App\Models\Event;
-use App\Models\EventMailTemplate;
 use App\Models\Registration;
 use App\Notifications\RegistrationCompletedNotification;
 use App\Notifications\RegistrationSubmittedPaymentPendingNotification;
@@ -45,10 +43,7 @@ test('a completed registration notification sends all configured confirmation ad
             'second@example.com',
         ],
     ]);
-    EventMailTemplate::factory()->create([
-        'event_id' => $event->id,
-        'type' => EventMailTemplateType::RegistrationCompleted,
-    ]);
+
     /** @var Registration $registration */
     $registration = Registration::factory()->for($event)->create();
 

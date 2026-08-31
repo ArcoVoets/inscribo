@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Event;
 use App\Models\Invite;
 use App\Models\Registration;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -121,5 +122,44 @@ it('passes registration form colors to the registration page', function () {
             ->where('event.accentColorRequiredAndHover', '#445566')
             ->where('event.accentColorLabelAndRadio', '#778899')
             ->where('event.accentColorSectionTitle', '#aabbcc')
+        );
+});
+
+it('uses default capacity warning copy for new events and republishes the custom values when copied', function () {
+    /** @var TestCase $this */
+    $event = Event::factory()->create([
+        'opens_at' => now()->subDay(),
+        'closes_at' => null,
+    ]);
+
+    expect($event->capacity_full_title)->toBe('Capacity is full')
+        ->and($event->capacity_full_description)->toBe('You can still register, but you will be placed on the waitlist.')
+        ->and($event->waitlist_active_title)->toBe('Waitlist active')
+        ->and($event->waitlist_active_description)->toBe('There is currently a waitlist. New registrations will be placed on the waitlist.');
+
+    $customEvent = Event::factory()->create([
+        'opens_at' => now()->subWeek(),
+        'closes_at' => null,
+        'capacity_full_title' => 'Sold out',
+        'capacity_full_description' => 'You may still join the queue.',
+        'waitlist_active_title' => 'Queue active',
+        'waitlist_active_description' => 'We will reach out if a spot opens up.',
+    ]);
+
+    $copy = $customEvent->replicate();
+    $copy->save();
+
+    expect($copy->capacity_full_title)->toBe('Sold out')
+        ->and($copy->capacity_full_description)->toBe('You may still join the queue.')
+        ->and($copy->waitlist_active_title)->toBe('Queue active')
+        ->and($copy->waitlist_active_description)->toBe('We will reach out if a spot opens up.');
+
+    $this->get(route('events.register', ['event' => $customEvent->id]))
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('registration/create')
+            ->where('event.capacityFullTitle', 'Sold out')
+            ->where('event.capacityFullDescription', 'You may still join the queue.')
+            ->where('event.waitlistActiveTitle', 'Queue active')
+            ->where('event.waitlistActiveDescription', 'We will reach out if a spot opens up.')
         );
 });

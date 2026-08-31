@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Event;
-use App\Models\Form;
 use App\Models\FormField;
 use App\Models\FormFieldOption;
 use App\Models\FormSection;
@@ -57,71 +56,66 @@ function fieldId(Event $event, string $fieldName): int
 
 function eventWithRegistrationForm(array $eventAttributes = []): Event
 {
-    return Event::withoutEvents(function () use ($eventAttributes): Event {
-        $event = Event::query()->create(array_merge([
-            'title' => fake()->sentence(3),
-            'capacity' => fake()->numberBetween(5, 50),
-            'opens_at' => now()->subDay(),
-            'closes_at' => now()->addDay(),
-            'show_waitlist_position' => false,
-            'show_capacity_data' => false,
-            'home_url' => null,
-            'registration_expiration_minutes' => 30,
-        ], $eventAttributes));
+    $event = Event::query()->create(array_merge([
+        'title' => fake()->sentence(3),
+        'capacity' => fake()->numberBetween(5, 50),
+        'opens_at' => now()->subDay(),
+        'closes_at' => now()->addDay(),
+        'show_waitlist_position' => false,
+        'show_capacity_data' => false,
+        'home_url' => null,
+        'registration_expiration_minutes' => 30,
+    ], $eventAttributes));
 
-        $form = Form::factory()->create([
-            'event_id' => $event->id,
-            'title' => $event->title.' Registration',
-        ]);
+    $form = $event->fresh()->form;
 
-        $section = FormSection::factory()->create([
-            'form_id' => $form->id,
-            'title' => 'Main',
-            'sort_order' => 0,
-        ]);
+    $section = FormSection::factory()->create([
+        'form_id' => $form->id,
+        'title' => 'Main',
+        'sort_order' => 0,
+    ]);
 
-        $nameField = FormField::factory()->create([
-            'form_id' => $form->id,
-            'section_id' => $section->id,
-            'label' => 'Name',
-            'name' => 'name',
-            'type' => 'text',
-            'required' => true,
-            'sort_order' => 0,
-        ]);
+    $nameField = FormField::factory()->create([
+        'form_id' => $form->id,
+        'section_id' => $section->id,
+        'label' => 'Name',
+        'name' => 'name',
+        'type' => 'text',
+        'required' => true,
+        'sort_order' => 0,
+    ]);
 
-        $emailField = FormField::factory()->create([
-            'form_id' => $form->id,
-            'section_id' => $section->id,
-            'label' => 'Email',
-            'name' => 'email',
-            'type' => 'email',
-            'required' => true,
-            'sort_order' => 0,
-        ]);
+    $emailField = FormField::factory()->create([
+        'form_id' => $form->id,
+        'section_id' => $section->id,
+        'label' => 'Email',
+        'name' => 'email',
+        'type' => 'email',
+        'required' => true,
+        'sort_order' => 0,
+    ]);
 
-        $participantTypeField = FormField::factory()->create([
-            'form_id' => $form->id,
-            'section_id' => $section->id,
-            'label' => 'Participant type',
-            'name' => 'participant_type',
-            'type' => 'select',
-            'required' => true,
-            'sort_order' => 1,
-        ]);
+    $participantTypeField = FormField::factory()->create([
+        'form_id' => $form->id,
+        'section_id' => $section->id,
+        'label' => 'Participant type',
+        'name' => 'participant_type',
+        'type' => 'select',
+        'required' => true,
+        'sort_order' => 1,
+    ]);
 
-        FormFieldOption::factory()->createMany([
-            ['field_id' => $participantTypeField->id, 'label' => 'Student', 'value' => 'student', 'price_cents' => 0, 'sort_order' => 0],
-            ['field_id' => $participantTypeField->id, 'label' => 'Worker', 'value' => 'worker', 'price_cents' => 1500, 'sort_order' => 1],
-        ]);
+    FormFieldOption::factory()->createMany([
+        ['field_id' => $participantTypeField->id, 'label' => 'Student', 'value' => 'student', 'price_cents' => 0, 'sort_order' => 0],
+        ['field_id' => $participantTypeField->id, 'label' => 'Worker', 'value' => 'worker', 'price_cents' => 1500, 'sort_order' => 1],
+    ]);
 
-        $form->update([
-            'name_field_id' => $nameField->id,
-            'email_field_id' => $emailField->id,
-        ]);
+    $form->update([
+        'name_field_id' => $nameField->id,
+        'email_field_id' => $emailField->id,
+    ]);
 
-        return $event->fresh(['form.sections.fields.options']);
-    });
+    return $event->fresh(['form.sections.fields.options']);
 }
 
 function registrationPayload(Event $event, ?Invite $invite = null, string $email = 'registrant@example.com'): array

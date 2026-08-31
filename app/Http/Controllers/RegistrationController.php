@@ -78,7 +78,7 @@ class RegistrationController extends Controller
             ];
         }
 
-        /** @var array|null $capacityProps */
+        /** @var array{reservedCount:int,availableCapacity:int,waitlistCount:int}|null */
         $capacityProps = $event->show_capacity_data ? $event->capacitySnapshot() : null;
 
         return Inertia::render('registration/create', [
@@ -96,7 +96,7 @@ class RegistrationController extends Controller
     {
         Gate::authorize('preview', $event);
 
-        /** @var array|null $capacityProps */
+        /** @var array{reservedCount:int,availableCapacity:int,waitlistCount:int}|null */
         $capacityProps = $event->show_capacity_data ? $event->capacitySnapshot() : null;
 
         return Inertia::render('registration/create', [
@@ -120,6 +120,10 @@ class RegistrationController extends Controller
      *     accentColorRequiredAndHover: string|null,
      *     accentColorLabelAndRadio: string|null,
      *     accentColorSectionTitle: string|null,
+     *     capacityFullTitle: string,
+     *     capacityFullDescription: string,
+     *     waitlistActiveTitle: string,
+     *     waitlistActiveDescription: string,
      * }
      */
     private function mapEventForFrontend(Event $event): array
@@ -134,6 +138,10 @@ class RegistrationController extends Controller
             'accentColorRequiredAndHover' => $event->accent_color_required_and_hover,
             'accentColorLabelAndRadio' => $event->accent_color_label_and_radio,
             'accentColorSectionTitle' => $event->accent_color_section_title,
+            'capacityFullTitle' => $event->capacity_full_title,
+            'capacityFullDescription' => $event->capacity_full_description,
+            'waitlistActiveTitle' => $event->waitlist_active_title,
+            'waitlistActiveDescription' => $event->waitlist_active_description,
         ];
     }
 

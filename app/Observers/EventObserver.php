@@ -8,6 +8,16 @@ use App\Models\EventMailTemplate;
 
 class EventObserver
 {
+    public function creating(Event $event): void
+    {
+        $event->fill([
+            'capacity_full_title' => $event->capacity_full_title ?: __('admin.events.form.default_messages.capacity_full_title'),
+            'capacity_full_description' => $event->capacity_full_description ?: __('admin.events.form.default_messages.capacity_full_description'),
+            'waitlist_active_title' => $event->waitlist_active_title ?: __('admin.events.form.default_messages.waitlist_active_title'),
+            'waitlist_active_description' => $event->waitlist_active_description ?: __('admin.events.form.default_messages.waitlist_active_description'),
+        ]);
+    }
+
     public function created(Event $event): void
     {
         if (! $event->form) {

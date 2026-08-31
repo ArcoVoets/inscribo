@@ -11,12 +11,6 @@ export const en = {
             available: 'Available',
             reserved: 'Reserved',
             waitlist: 'Waitlist',
-            capacityFullTitle: 'Capacity is full',
-            capacityFullDescription:
-                'You can still register, but you will be placed on the waitlist.',
-            waitlistActiveTitle: 'Waitlist active',
-            waitlistActiveDescription:
-                'There is currently a waitlist. New registrations will be placed on the waitlist.',
             cannotRegisterTitle: 'Cannot register',
             formUnavailable: 'Registration form is currently unavailable.',
             selectPlaceholder: 'Select…',

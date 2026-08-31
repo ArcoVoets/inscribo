@@ -195,15 +195,15 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
 
                     {showCapacityFullWarning && (
                         <Alert className="mb-6 rounded-none" variant="destructive">
-                            <AlertTitle>{strings.capacityFullTitle}</AlertTitle>
-                            <AlertDescription>{strings.capacityFullDescription}</AlertDescription>
+                            <AlertTitle>{event.capacityFullTitle}</AlertTitle>
+                            <AlertDescription>{event.capacityFullDescription}</AlertDescription>
                         </Alert>
                     )}
 
                     {showWaitlistWarning && !showCapacityFullWarning && (
                         <Alert className="mb-6 rounded-none">
-                            <AlertTitle>{strings.waitlistActiveTitle}</AlertTitle>
-                            <AlertDescription>{strings.waitlistActiveDescription}</AlertDescription>
+                            <AlertTitle>{event.waitlistActiveTitle}</AlertTitle>
+                            <AlertDescription>{event.waitlistActiveDescription}</AlertDescription>
                         </Alert>
                     )}
 
@@ -325,7 +325,7 @@ export default function Create(props: Inertia.Pages.Registration.Create) {
 
                                                         case 'html':
                                                             control = (field.htmlContent && (
-                                                                    <div className="prose max-w-none prose-p:text-(--accent-color-label-and-radio) dark:prose-invert" dangerouslySetInnerHTML={{ __html: field.htmlContent }} />
+                                                                <div className="prose max-w-none prose-p:text-(--accent-color-label-and-radio) dark:prose-invert" dangerouslySetInnerHTML={{ __html: field.htmlContent }} />
                                                             ));
                                                             break;
 

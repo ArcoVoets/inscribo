@@ -19,6 +19,10 @@ use Illuminate\Support\Uri;
  * @property ?string $wordpress_status_page_url
  * @property ?string $wordpress_form_page_url
  * @property bool $wordpress_enabled
+ * @property string $capacity_full_title
+ * @property string $capacity_full_description
+ * @property string $waitlist_active_title
+ * @property string $waitlist_active_description
  **/
 #[ObservedBy(EventObserver::class)]
 class Event extends Model

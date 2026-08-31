@@ -11,10 +11,6 @@ export interface LocaleStrings {
             available: string;
             reserved: string;
             waitlist: string;
-            capacityFullTitle: string;
-            capacityFullDescription: string;
-            waitlistActiveTitle: string;
-            waitlistActiveDescription: string;
             cannotRegisterTitle: string;
             formUnavailable: string;
             selectPlaceholder: string;

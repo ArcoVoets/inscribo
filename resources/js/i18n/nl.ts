@@ -11,12 +11,6 @@ export const nl = {
             available: 'Beschikbaar',
             reserved: 'Gereserveerd',
             waitlist: 'Wachtlijst',
-            capacityFullTitle: 'Capaciteit vol',
-            capacityFullDescription:
-                'Je kunt je nog steeds inschrijven, maar je wordt op de wachtlijst geplaatst.',
-            waitlistActiveTitle: 'Wachtlijst actief',
-            waitlistActiveDescription:
-                'Er is momenteel een wachtlijst. Nieuwe inschrijvingen worden op de wachtlijst geplaatst.',
             cannotRegisterTitle: 'Kan niet inschrijven',
             formUnavailable: 'Inschrijfformulier is momenteel niet beschikbaar.',
             selectPlaceholder: 'Selecteren…',
