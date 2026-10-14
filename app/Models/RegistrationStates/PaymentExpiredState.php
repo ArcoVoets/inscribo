@@ -3,6 +3,7 @@
 namespace App\Models\RegistrationStates;
 
 use App\Enums\RegistrationStates;
+use App\Filament\Actions\InviteAction;
 use App\Models\RegistrationState;
 use Carbon\CarbonImmutable;
 use Filament\Actions\Action;
@@ -14,6 +15,17 @@ use Parental\HasParent;
 class PaymentExpiredState extends RegistrationState
 {
     use HasParent;
+
+    public function casts(): array
+    {
+        $casts = parent::casts();
+
+        // Remove the type cast as this causes Livewire to attempt to instantiate
+        // an enum class which isn't possible
+        unset($casts['type']);
+
+        return $casts;
+    }
 
     public static string $filamentColor = 'danger';
 
@@ -51,6 +63,7 @@ class PaymentExpiredState extends RegistrationState
     public function filamentHeaderActions(): array
     {
         return [
+            InviteAction::make('invite', $this->registration),
             self::cancelAction(),
         ];
     }

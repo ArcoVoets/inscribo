@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RegistrationStates;
+use App\Filament\Actions\InviteAction;
 use App\Filament\Resources\Events\Pages\ManageEventRegistrations;
 use App\Models\Event;
 use App\Models\Registration;
@@ -85,6 +86,28 @@ it('does not persist payment expired type on save', function () {
 
     expect($registration->currentState)->toBeInstanceOf(PaymentPendingState::class);
     expect($registration->currentState->type)->toBe(RegistrationStates::PaymentPending);
+});
+
+it('can invite a registration whose payment has expired', function () {
+    /** @var TestCase $this */
+    $registration = Registration::factory()
+        ->paymentPending()
+        ->create();
+
+    $registration->currentState->update([
+        'expires_at' => now()->subMinute(),
+    ]);
+
+    $registration->refresh();
+
+    $action = InviteAction::make('invite', $registration);
+    $action->getActionFunction()([
+        'invite_window_hours' => 24,
+    ], $registration);
+
+    expect($registration->refresh()->currentState->type)
+        ->toBe(RegistrationStates::PaymentPending)
+        ->and($registration->currentState->expires_at)->toBeGreaterThan(now());
 });
 
 it('counts registrations by latest state id, not created_at', function () {

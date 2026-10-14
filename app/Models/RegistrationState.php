@@ -25,13 +25,16 @@ class RegistrationState extends Model
 
     protected $guarded = [];
 
-    protected $casts = [
-        'expires_at' => 'datetime',
-        'type' => RegistrationStates::class,
-        'amount_cents' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+    public function casts(): array
+    {
+        return [
+            'expires_at' => 'datetime',
+            'type' => RegistrationStates::class,
+            'amount_cents' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 
     public static string $filamentColor = 'gray';
 
