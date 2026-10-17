@@ -41,6 +41,8 @@ Event registration platform with configurable forms and payment tracking.
             - `QUEUE_CONNECTION` (`database` if a queue worker will be set up (preferably), otherwise use `background` or `deffered`)
         - Mail configuration:
             - `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME`
+        - Optionally (if using in combination with [inscribo-embed](https://github.com/ArcoVoets/inscribo-embed) and the registration form is embedded on a different domain):
+            - set `SESSION_SAME_SITE` to `none` to allow cross-site cookies for the session cookie. Without this, validation messages may not be displayed correctly.
    - Set up your database connection in the `.env` file
    - Set up your Mollie API key in the `.env` file
    - Set up your mail configuration in the `.env` file
