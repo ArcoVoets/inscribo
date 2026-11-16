@@ -64,3 +64,23 @@ test('mailer settings are optional for notifications', function () {
     expect($message->from)->toBe([]);
     expect($message->replyTo)->toBe([]);
 });
+
+test('event reply-to address overrides mailer settings', function () {
+    $mailerSettings = MailerSettings::factory()->create([
+        'reply_to_address' => 'mailer-reply@example.com',
+    ]);
+
+    $event = Event::factory()->create([
+        'mailer_settings_id' => $mailerSettings->id,
+        'reply_to_address' => 'event-reply@example.com',
+    ]);
+
+    $registration = Registration::factory()->create([
+        'event_id' => $event->id,
+    ]);
+
+    $notification = new RegistrationSubmittedPaymentPendingNotification($registration, now()->addHour());
+
+    expect($notification->toMail($registration)->replyTo)
+        ->toBe([['event-reply@example.com', null]]);
+});

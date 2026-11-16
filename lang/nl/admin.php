@@ -182,6 +182,8 @@ return [
                 'mail_template_content' => 'Inhoud',
                 'mailer_settings' => 'Mailer instellingen',
                 'mailer_settings_helper' => 'Selecteer de SMTP-gegevens die voor dit evenement gebruikt worden.',
+                'reply_to_address' => 'Antwoordadres voor evenement',
+                'reply_to_address_helper' => 'Optioneel. Als dit leeg is, wordt het antwoordadres uit de mailer instellingen gebruikt.',
                 'confirmation_mail_addresses' => 'Bevestigingsmailadressen',
                 'confirmation_mail_addresses_placeholder' => 'E-mailadres toevoegen',
                 'confirmation_mail_addresses_helper' => 'E-mailadressen die aan de BCC van de inschrijving voltooid-mail worden toegevoegd. Elk adres ontvangt voor elke inschrijving een kopie van de bevestigingsmail.',

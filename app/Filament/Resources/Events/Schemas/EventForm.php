@@ -326,6 +326,11 @@ class EventForm
                             ->preload()
                             ->nullable()
                             ->helperText(__('admin.events.form.fields.mailer_settings_helper')),
+                        TextInput::make('reply_to_address')
+                            ->label(__('admin.events.form.fields.reply_to_address'))
+                            ->email()
+                            ->nullable()
+                            ->helperText(__('admin.events.form.fields.reply_to_address_helper')),
                         TagsInput::make('confirmation_mail_addresses')
                             ->label(__('admin.events.form.fields.confirmation_mail_addresses'))
                             ->placeholder(__('admin.events.form.fields.confirmation_mail_addresses_placeholder'))

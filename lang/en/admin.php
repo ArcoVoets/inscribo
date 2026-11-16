@@ -182,6 +182,8 @@ return [
                 'mail_template_content' => 'Content',
                 'mailer_settings' => 'Mailer settings',
                 'mailer_settings_helper' => 'Select the SMTP credentials used for this event.',
+                'reply_to_address' => 'Event reply-to address',
+                'reply_to_address_helper' => 'Optional. When empty, the reply-to address from the mailer settings is used.',
                 'confirmation_mail_addresses' => 'Confirmation mail addresses',
                 'confirmation_mail_addresses_placeholder' => 'Add email address',
                 'confirmation_mail_addresses_helper' => 'Email addresses to add to the BCC of the registration completed mail. Each address receives a copy of the confirmation email for every registration.',

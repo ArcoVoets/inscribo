@@ -71,6 +71,9 @@ abstract class BaseNotification extends Notification implements ShouldQueue
         $event = $this->getEvent();
         $mailerSettings = $event->mailerSettings;
         $mailerName = $event->mailerName();
+        $replyToAddress = filled($event->reply_to_address)
+            ? $event->reply_to_address
+            : $mailerSettings?->reply_to_address;
 
         return (new MailMessage)
             ->subject($mailTemplate->subject)
@@ -81,8 +84,8 @@ abstract class BaseNotification extends Notification implements ShouldQueue
                 fn (MailMessage $mail): MailMessage => $mail->from($mailerSettings->from_address, $mailerSettings->from_name)
             )
             ->when(
-                $mailerSettings?->reply_to_address !== null,
-                fn (MailMessage $mail): MailMessage => $mail->replyTo($mailerSettings->reply_to_address)
+                $replyToAddress !== null,
+                fn (MailMessage $mail): MailMessage => $mail->replyTo($replyToAddress)
             )
             ->when(
                 $this->bccAddresses() !== null,
